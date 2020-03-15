@@ -33,9 +33,7 @@ class App extends Component {
         {this.state.microIds.map((microId: string)=> (
           <Card className="Brightness" key={microId}>
             <Card.Header>MicroController: {microId}</Card.Header>
-            <Card.Body>
               <MicroController key={microId} microId={microId} socket={this.socket}></MicroController>
-            </Card.Body>
           </Card>
         ))}
         </Card.Body>

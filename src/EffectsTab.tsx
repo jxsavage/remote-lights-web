@@ -11,7 +11,7 @@ interface EffectsTabProps {
 interface EffectsTabState {
   effect: EffectType | null;
 }
-enum EffectType {
+export enum EffectType {
   ColorWaves = "COLORWAVES",
   BlendWave = "BLENDWAVE"
 }
