@@ -4,30 +4,35 @@ import Nav from "react-bootstrap/Nav";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-interface EffectsTabProps {
+import {SegmentSocketResponse} from './MicroController/MicroController';
+interface EffectsTabProps extends SegmentSocketResponse {
   socket: SocketIOClient.Socket;
   microId: string;
+  segmentIndex: number;
 }
-interface EffectsTabState {
-  effect: EffectType | null;
-}
+interface EffectsTabState extends SegmentSocketResponse {}
 export enum EffectType {
   ColorWaves = "COLORWAVES",
   BlendWave = "BLENDWAVE"
 }
 class EffectsTab extends Component<EffectsTabProps> {
   microId: string;
+  initialized: boolean;
+  segmentIndex: number;
   state: EffectsTabState;
   socket: SocketIOClient.Socket;
-  initialized: boolean;
+  
   constructor(props: EffectsTabProps) {
     super(props);
     this.socket = props.socket;
     this.microId = props.microId;
+    this.segmentIndex = props.segmentIndex;
     this.initialized = false;
-    this.socket.on(`setEffect.${this.microId}`, this.setEffect);
+    //this.socket.on(`setEffect.${this.microId}`, this.setEffect);
     this.state = {
-      effect: null
+      offset: props.offset,
+      effect: props.effect,
+      numLEDs: props.numLEDs,
     }
   }
   setEffect = (effect: EffectType) => {
@@ -48,7 +53,7 @@ class EffectsTab extends Component<EffectsTabProps> {
     }, this.setEffect);
   }
   componentDidMount = () => {
-    this.getMicroEffect();
+    //this.getMicroEffect();
   };
   
   changeEffect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,4 +132,5 @@ class EffectsTab extends Component<EffectsTabProps> {
     );
   }
 }
+
 export default EffectsTab;

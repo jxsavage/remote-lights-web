@@ -1,5 +1,5 @@
 import React, { ReactPropTypes, Component } from 'react';
-import MicroController from './MicroController';
+import MicroController from './MicroController/MicroController';
 import io from 'socket.io-client';
 import Card from "react-bootstrap/Card";
 import './App.css';
