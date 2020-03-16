@@ -4,17 +4,14 @@ import Nav from "react-bootstrap/Nav";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import {SegmentSocketResponse} from './MicroController/MicroController';
-interface EffectsTabProps extends SegmentSocketResponse {
+import {WebMicroSegment, WebEffect} from 'Shared/MicroTypes';
+interface EffectsTabProps extends WebMicroSegment {
   socket: SocketIOClient.Socket;
   microId: string;
   segmentIndex: number;
 }
-interface EffectsTabState extends SegmentSocketResponse {}
-export enum EffectType {
-  ColorWaves = "COLORWAVES",
-  BlendWave = "BLENDWAVE"
-}
+interface EffectsTabState extends WebMicroSegment {}
+
 class EffectsTab extends Component<EffectsTabProps> {
   microId: string;
   initialized: boolean;
@@ -35,11 +32,11 @@ class EffectsTab extends Component<EffectsTabProps> {
       numLEDs: props.numLEDs,
     }
   }
-  setEffect = (effect: EffectType) => {
+  setEffect = (effect: WebEffect) => {
     console.log('setEffect', effect);
     this.setState({effect: effect});
   }
-  setMicroEffect = (effect: EffectType) => {
+  setMicroEffect = (effect: WebEffect) => {
     console.log('CLIENT: settingMicroEffect', this.microId)
     this.socket.emit('setMicroEffect', {
       microId: this.microId,
@@ -57,7 +54,7 @@ class EffectsTab extends Component<EffectsTabProps> {
   };
   
   changeEffect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const effect: EffectType = event.target.value as EffectType;
+    const effect: WebEffect = event.target.value as WebEffect;
     this.setMicroEffect(effect);
   }
   changeEffectsTab = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +64,7 @@ class EffectsTab extends Component<EffectsTabProps> {
    * @memberof EffectsTab
    */
   handleActivateClick = (event: React.MouseEvent) => {
-    const effect: EffectType = event.currentTarget.id as EffectType;
+    const effect: WebEffect = event.currentTarget.id as WebEffect;
     this.setMicroEffect(effect);
   }
   render() {
@@ -101,7 +98,7 @@ class EffectsTab extends Component<EffectsTabProps> {
                   </Card.Body>
                   <Card.Footer>
                     <ButtonGroup>
-                      <Button id={EffectType.ColorWaves} disabled={this.state.effect === EffectType.ColorWaves} onClick={this.handleActivateClick} variant="info">Activate</Button>
+                      <Button id={WebEffect.ColorWaves} disabled={this.state.effect === WebEffect.ColorWaves} onClick={this.handleActivateClick} variant="info">Activate</Button>
                       {/* <Button variant="warning">Set Effect</Button> */}
                     </ButtonGroup>
                   </Card.Footer>
@@ -117,7 +114,7 @@ class EffectsTab extends Component<EffectsTabProps> {
                 </Card.Body>
                 <Card.Footer>
                   <ButtonGroup>
-                    <Button id={EffectType.BlendWave} disabled={this.state.effect === EffectType.BlendWave} onClick={this.handleActivateClick} variant="info">Activate</Button>
+                    <Button id={WebEffect.BlendWave} disabled={this.state.effect === WebEffect.BlendWave} onClick={this.handleActivateClick} variant="info">Activate</Button>
                     {/* <Button variant="warning">Set Effect</Button> */}
                   </ButtonGroup>
                 </Card.Footer>

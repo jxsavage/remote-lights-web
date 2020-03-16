@@ -1,26 +1,22 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
-import EffectsTab, { EffectType } from '../EffectsTab';
+import EffectsTab from '../EffectsTab';
 import { Slider, Rail, Handles, Tracks } from 'react-compound-slider';
 import { Handle, Track, TooltipRail } from '../SliderComponents';
 import { Nav, Tab } from 'react-bootstrap';
-
+import {WebMicroSegment} from 'Shared/MicroTypes';
 interface MicroControllerProps {
   socket: SocketIOClient.Socket;
   microId: string;
 }
 interface MicroControllerState {
   brightness: number;
-  segments: SegmentSocketResponse[];
+  segments: WebMicroSegment[];
   segmentBoundaries: number[];
   update: number[];
   domain: number[];
 }
-export interface SegmentSocketResponse {
-  offset: number;
-  numLEDs: number;
-  effect: EffectType;
-}
+
 const sliderStyle: React.CSSProperties = {
   position: 'relative',
   width: '100%',
@@ -63,7 +59,7 @@ class MicroController extends Component<MicroControllerProps> {
     console.log('setBrightness', brightness);
     this.setState({ brightness });
   };
-  setSegments = (segments: SegmentSocketResponse[]) => {
+  setSegments = (segments: WebMicroSegment[]) => {
     console.log('setSegments', segments);
     const iterations = segments.length - 1;
     const boundaries: number[] = segments.reduce((boundaries, segment, index) => {
