@@ -4,7 +4,7 @@ import EffectsTab from '../EffectsTab';
 import { Slider, Rail, Handles, Tracks } from 'react-compound-slider';
 import { Handle, Track, TooltipRail } from '../SliderComponents';
 import { Nav, Tab } from 'react-bootstrap';
-import {WebMicroSegment} from 'Shared/MicroTypes';
+import {WebMicroSegment} from '../Shared/MicroTypes';
 interface MicroControllerProps {
   socket: SocketIOClient.Socket;
   microId: string;

@@ -1,17 +1,17 @@
 import { Component } from 'react';
-import {EffectType} from './EffectsTab';
+import {WebEffect} from './Shared/MicroCommands';
 interface LEDSegmentProps {
   index: number;
   offset: number;
   numLEDs: number;
-  effect: EffectType;
+  effect: WebEffect;
   socket: SocketIOClient.Socket;
 }
 interface LEDSegmentState {
   index: number;
   offset: number;
   numLEDs: number;
-  effect: EffectType;
+  effect: WebEffect;
 }
 class LEDSegment extends Component<LEDSegmentProps> {
   socket: SocketIOClient.Socket;
