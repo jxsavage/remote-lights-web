@@ -4,7 +4,8 @@ import Nav from "react-bootstrap/Nav";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import {WebMicroSegment, WebEffect} from 'Shared/MicroTypes';
+import {WebMicroSegment} from 'Shared/MicroTypes';
+import {WebEffect} from 'Shared/MicroCommands';
 interface EffectsTabProps extends WebMicroSegment {
   socket: SocketIOClient.Socket;
   microId: string;

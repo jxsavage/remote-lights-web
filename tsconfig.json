@@ -3,8 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "Shared/*": [
-        "sub-modules/remote-lights-shared/src/*",
-        "sub-modules/remote-lights-shared/types/*"
+        "sub-modules/remote-lights-shared/*"
       ]
     },
     "target": "es5",
