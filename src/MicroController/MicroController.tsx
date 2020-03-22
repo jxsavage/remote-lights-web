@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
-import EffectsTab from '../EffectsTab';
-import { Slider, Rail, Handles, Tracks } from 'react-compound-slider';
+import { Slider, Rail, Handles, Tracks, SliderItem } from 'react-compound-slider';
 import { Handle, Track, TooltipRail } from '../SliderComponents';
-import { Nav, Tab } from 'react-bootstrap';
-import {WebMicroSegment} from '../Shared/MicroTypes';
+import {WebMicroSegment, WebMicroInfo} from '../Shared/MicroTypes';
+import { SharedMicroState } from 'src/Shared/MicroShared';
+import { WebEffect } from 'src/Shared/MicroCommands';
+import LEDSegments from './Children/LEDSegments';
 interface MicroControllerProps {
   socket: SocketIOClient.Socket;
-  microId: string;
+  micro: WebMicroInfo;
 }
 interface MicroControllerState {
   brightness: number;
   segments: WebMicroSegment[];
   segmentBoundaries: number[];
-  update: number[];
   domain: number[];
 }
 
@@ -22,73 +22,54 @@ const sliderStyle: React.CSSProperties = {
   width: '100%',
   margin: '3rem auto',
 };
-const segmentButtonStyle: React.CSSProperties = {
-  width: '100%',
-  margin: 0,
-};
-function segmentTabWidth(totalLEDs: number, segmentLEDs: number): React.CSSProperties {
-  return {
-    width: `${(segmentLEDs / totalLEDs) * 100}%`,
-  };
-}
+
 class MicroController extends Component<MicroControllerProps> {
-  microId: string;
-  totalLEDs: number;
+  micro: SharedMicroState;
   state: MicroControllerState;
   socket: SocketIOClient.Socket;
   constructor(props: MicroControllerProps) {
     super(props);
     this.socket = props.socket;
-    this.microId = props.microId;
-    this.totalLEDs = 288;
+    this.micro = new SharedMicroState(props.micro);
+    const {socket, micro} = this;
     this.state = {
-      brightness: 0,
-      segments: [],
-      segmentBoundaries: [],
-      update: [],
-      domain: [0, this.totalLEDs],
+      brightness: micro.getBrightness(),
+      segments: micro.getSegments(),
+      segmentBoundaries: micro.getSegmentBoundaries(),
+      domain: [0, micro.getTotalLEDs()],
     };
-    this.socket.on(`setBrightness.${this.microId}`, this.setBrightness);
-    this.socket.on(`setSegments.${this.microId}`, this.setSegments);
+    
+    socket.on(`setBrightness.${micro.getId()}`, this.setBrightness);
+    socket.on(`setSegments.${micro.getId()}`, this.setSegments);
   }
   componentDidMount = () => {
-    this.getMicroBrightness();
-    this.getMicroSegments();
+    // this.getMicroBrightness();
+    // this.getMicroSegments();
   };
   setBrightness = (brightness: number) => {
     console.log('setBrightness', brightness);
     this.setState({ brightness });
   };
   setSegments = (segments: WebMicroSegment[]) => {
-    console.log('setSegments', segments);
-    const iterations = segments.length - 1;
-    const boundaries: number[] = segments.reduce((boundaries, segment, index) => {
-      if (index < iterations) {
-        boundaries.push(segment.offset + segment.numLEDs);
-      }
-
-      return boundaries;
-    }, [] as number[]);
-    this.setState({
-      segments,
-      segmentBoundaries: boundaries,
-    });
   };
   setMicroBrightness = (brightness: number) => {
-    console.log('CLIENT: settingMicroBrightness', this.microId);
+    const microId = this.micro.getId();
+    console.log('CLIENT: settingMicroBrightness', microId);
     this.socket.emit('setMicroBrightness', {
-      microId: this.microId,
+      microId,
       brightness,
     });
   };
   getMicroBrightness = () => {
+    const microId = this.micro.getId();
     this.socket.emit('getMicroBrightness', {
-      microId: this.microId,
+      microId,
     });
   };
   getMicroSegments = () => {
+    const microId = this.micro.getId();
     this.socket.emit('getMicroSegments', {
-      microId: this.microId,
+      microId,
     });
   };
   changeBrightness = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,20 +77,44 @@ class MicroController extends Component<MicroControllerProps> {
     this.setState({ brightness });
     this.setMicroBrightness(brightness);
   };
-  onUpdate = (update: ReadonlyArray<number>) => {
-    this.setState({ update });
+  onUpdate = (segmentBoundaries: ReadonlyArray<number>) => {
+    this.micro.resizeSegmentsFromBoundaries(segmentBoundaries as number[]);
+    const segments = this.micro.getSegments();
+    this.setState({
+      segments,
+      segmentBoundaries
+    });
   };
 
   onChange = (segmentBoundaries: ReadonlyArray<number>) => {
     this.setState({ segmentBoundaries });
   };
+  handleIsActive = (handle: SliderItem) => {
+    const isMin = handle.value === 0 ? true : false;
+    const isMax = handle.value === this.micro.getTotalLEDs() ? true : false;
+    const minOrMax = isMin || isMax ? true : false;
+    return minOrMax;
+  }
+  setEffect = (index: number, effect: WebEffect) => {
+    const {micro} = this;
+    micro.setEffect(index, effect);
+    const segments = micro.getSegments();
+    this.setState({segments});
+  }
   render() {
     const {
-      microId,
-      socket,
-      totalLEDs,
+      micro,
+      setEffect,
+      handleIsActive,
       state: { segmentBoundaries, domain, segments },
     } = this;
+    const totalLEDs = micro.getTotalLEDs();
+    const segmentTabProps = {
+      totalLEDs,
+      segments,
+      setEffect
+    };
+    
     return (
       <Card.Body>
         <input
@@ -130,7 +135,7 @@ class MicroController extends Component<MicroControllerProps> {
             domain={domain}
             rootStyle={sliderStyle}
             onUpdate={this.onUpdate}
-            onChange={this.onChange}
+            // onChange={this.onChange}
             values={segmentBoundaries}
           >
             <Rail>{railProps => <TooltipRail {...railProps} />}</Rail>
@@ -142,6 +147,7 @@ class MicroController extends Component<MicroControllerProps> {
                       key={handle.id}
                       handle={handle}
                       domain={domain}
+                      disabled={handleIsActive(handle)}
                       isActive={handle.id === activeHandleID}
                       getHandleProps={getHandleProps}
                     />
@@ -160,39 +166,12 @@ class MicroController extends Component<MicroControllerProps> {
             </Tracks>
           </Slider>
         </div>
-        <Tab.Container defaultActiveKey="segment1Tab">
-          <Nav style={segmentButtonStyle} variant="tabs">
-            {segments.map(({ numLEDs }, index) => (
-              <Nav.Item style={segmentTabWidth(totalLEDs, numLEDs)}>
-                <Nav.Link eventKey={`segment${index + 1}Tab`}>{`Segment ${index + 1}`}</Nav.Link>
-              </Nav.Item>
-            ))}
-          </Nav>
-          <hr></hr>
-          <Tab.Content>
-            {segments.map((segment, index) => (
-              <Tab.Pane eventKey={`segment${index + 1}Tab`}>
-                <Card>
-                  <Card.Header>Segment {index + 1} Settings</Card.Header>
-                  <Card.Body>
-                    <EffectsTab
-                      {...segment}
-                      segmentIndex={index}
-                      microId={microId}
-                      socket={socket}
-                    ></EffectsTab>
-                  </Card.Body>
-                </Card>
-              </Tab.Pane>
-            ))}
-          </Tab.Content>
-        </Tab.Container>
-        {/* {this.state.segments.map((segment: SegmentSocketResponse, index) => (
-          <LEDSegment socket={this.socket} index={index} {...segment}></LEDSegment>
-        ))} */}
-        {/* <EffectsTab microId={this.microId} socket={this.socket}></EffectsTab> */}
+        <LEDSegments
+          {...segmentTabProps}
+        ></LEDSegments>
       </Card.Body>
     );
   }
 }
+
 export default MicroController;

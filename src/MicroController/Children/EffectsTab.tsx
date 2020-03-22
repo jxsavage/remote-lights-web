@@ -4,17 +4,103 @@ import Nav from "react-bootstrap/Nav";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import {WebMicroSegment} from './Shared/MicroTypes';
-import {WebEffect} from './Shared/MicroCommands';
+import {WebMicroSegment} from '../../Shared/MicroTypes';
+import {WebEffect} from '../../Shared/MicroCommands';
+import { SharedMicroState } from "../../Shared/MicroShared";
 interface EffectsTabProps extends WebMicroSegment {
   socket: SocketIOClient.Socket;
-  microId: string;
+  micro: SharedMicroState;
   segmentIndex: number;
 }
+interface EffectTabProps
+extends WebMicroSegment {
+  index: number;
+  setEffect: (index: number, effect: WebEffect) => void;
+}
 interface EffectsTabState extends WebMicroSegment {}
+const POSSIBLE_EFFECTS = Object.values(WebEffect);
+export function EffectTabContainer
+  (props: EffectTabProps){
+  const {effect} = props;
 
+  return (
+  <Card>
+      <Card.Header className="h4">
+        Effects
+      </Card.Header>
+      <Card.Body>
+      <Tab.Container
+        id="left-tabs-example"
+        defaultActiveKey={effect}>
+        <Row>
+          <Col sm={3}>
+            <EffectTab></EffectTab>
+          </Col>
+          <Col sm={9}>
+            <EffectTabContent
+            {...props}>
+
+            </EffectTabContent>
+          </Col>
+        </Row>
+      </Tab.Container>
+      </Card.Body>
+    </Card>
+  )}
+export function EffectTab() {
+  return (
+    <Nav variant="pills" className="flex-column">
+      {POSSIBLE_EFFECTS.map((effect) => (
+      <Nav.Item key={effect}>
+        <Nav.Link
+          className="h5"
+          eventKey={effect}>{effect}</Nav.Link>
+      </Nav.Item>
+      ))}
+    </Nav>
+)}
+function activateEffect(
+  effect: WebEffect,
+  index: number,
+  setEffect: (index: number, effect: WebEffect) => void
+){
+  return function() {
+    setEffect(index, effect);
+  }
+}
+export function EffectTabContent({effect, index, setEffect}: EffectTabProps) {
+  return (
+    <Tab.Content>
+    {POSSIBLE_EFFECTS.map((possibleEffect) => {
+      const possible = possibleEffect as WebEffect;
+      return (
+      <Tab.Pane
+        key={possibleEffect}
+        eventKey={possibleEffect}>
+        <Card>
+          <Card.Header className="h5">
+            {possibleEffect} Settings
+          </Card.Header>
+          <Card.Body>
+    
+          </Card.Body>
+          <Card.Footer>
+            <ButtonGroup>
+              <Button
+                disabled={possible === effect} 
+                onClick={activateEffect(possible, index, setEffect)} variant="info">Activate</Button>
+              {/* <Button variant="warning">Set Effect</Button> */}
+            </ButtonGroup>
+          </Card.Footer>
+        </Card>
+      </Tab.Pane>
+    )})}
+    </Tab.Content>
+  )
+}
 class EffectsTab extends Component<EffectsTabProps> {
   microId: string;
+  micro: SharedMicroState;
   initialized: boolean;
   segmentIndex: number;
   state: EffectsTabState;
@@ -23,7 +109,8 @@ class EffectsTab extends Component<EffectsTabProps> {
   constructor(props: EffectsTabProps) {
     super(props);
     this.socket = props.socket;
-    this.microId = props.microId;
+    this.micro = props.micro;
+    this.microId = this.micro.getId();
     this.segmentIndex = props.segmentIndex;
     this.initialized = false;
     //this.socket.on(`setEffect.${this.microId}`, this.setEffect);

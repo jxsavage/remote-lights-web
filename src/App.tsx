@@ -3,9 +3,10 @@ import MicroController from './MicroController/MicroController';
 import io from 'socket.io-client';
 import Card from "react-bootstrap/Card";
 import './App.css';
+import { WebMicroInfo } from './Shared/MicroTypes';
 const serverSocket = io.connect('http://192.168.0.104:3001/server');
 interface AppState {
-  microIds: string[];
+  micros: WebMicroInfo[];
 }
 class App extends Component {
   socket: SocketIOClient.Socket;
@@ -15,25 +16,25 @@ class App extends Component {
     this.socket = serverSocket;
     this.socket.on('setMicros', this.setMicros);
     this.state = {
-      microIds: []
+      micros: []
     };
   }
   componentDidMount = () => {
     this.socket.emit('initWebClient');
   }
-  setMicros = (microIds: Array<String>) => {
-    console.log(`microIds returned ${microIds}`);
-    this.setState({microIds});
+  setMicros = (micros: WebMicroInfo[]) => {
+    console.log(`microIds returned ${micros}`);
+    this.setState({micros});
   }
   render() {
     return (
       <Card className="App">
-        <Card.Header>MicroControllers</Card.Header>
+        <Card.Header className="h1">MicroControllers</Card.Header>
         <Card.Body>
-        {this.state.microIds.map((microId: string)=> (
-          <Card className="Brightness" key={microId}>
-            <Card.Header>MicroController: {microId}</Card.Header>
-              <MicroController key={microId} microId={microId} socket={this.socket}></MicroController>
+        {this.state.micros.map((micro)=> (
+          <Card key={micro.id}>
+            <Card.Header className="h2">MicroController: {micro.id}</Card.Header>
+              <MicroController key={micro.id} micro={micro} socket={this.socket}></MicroController>
           </Card>
         ))}
         </Card.Body>
