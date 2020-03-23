@@ -30,10 +30,10 @@ function LEDSegments(props: LEDSegmentsProps) {
 function SegmentNav({segments, totalLEDs}: LEDSegmentsProps) {
   return (
     <Nav style={segmentButtonStyle} variant="tabs">
-      {segments.map(({ numLEDs }, index) => (
+      {segments.map(({ numLEDs, offset }, index) => (
         <Nav.Item
           key={`segmentNav${index}`}
-          style={segmentTabWidth(totalLEDs, numLEDs)}>
+          style={segmentTabWidth(totalLEDs, numLEDs, index, offset)}>
           <Nav.Link
             className="h3 text-center"
             eventKey={`segment${index + 1}Tab`}>
@@ -44,8 +44,9 @@ function SegmentNav({segments, totalLEDs}: LEDSegmentsProps) {
     </Nav>
   )
 }
-function segmentTabWidth(totalLEDs: number, segmentLEDs: number): React.CSSProperties {
+function segmentTabWidth(totalLEDs: number, segmentLEDs: number, index: number, offset: number): React.CSSProperties {
   return {
+    marginLeft: `${index === 0 ? (offset / totalLEDs * 100) : 0}%`,
     width: `${(segmentLEDs / totalLEDs) * 100}%`,
   };
 }

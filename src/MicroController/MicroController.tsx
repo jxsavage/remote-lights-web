@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
-import { Slider, Rail, Handles, Tracks, SliderItem } from 'react-compound-slider';
-import { Handle, Track, TooltipRail } from '../SliderComponents';
+import { SliderItem } from 'react-compound-slider';
 import {WebMicroSegment, WebMicroInfo} from '../Shared/MicroTypes';
 import { SharedMicroState } from 'src/Shared/MicroShared';
 import { WebEffect } from 'src/Shared/MicroCommands';
 import LEDSegments from './Children/LEDSegments';
+import SegmentResizer, { SegmentResizerProps } from './Children/SegmentResizer';
+import BrightnessSlider, { BrightnessSliderProps } from './Children/BrightnessSlider';
 interface MicroControllerProps {
   socket: SocketIOClient.Socket;
   micro: WebMicroInfo;
@@ -16,12 +17,6 @@ interface MicroControllerState {
   segmentBoundaries: number[];
   domain: number[];
 }
-
-const sliderStyle: React.CSSProperties = {
-  position: 'relative',
-  width: '100%',
-  margin: '3rem auto',
-};
 
 class MicroController extends Component<MicroControllerProps> {
   micro: SharedMicroState;
@@ -77,13 +72,17 @@ class MicroController extends Component<MicroControllerProps> {
     this.setState({ brightness });
     this.setMicroBrightness(brightness);
   };
-  onUpdate = (segmentBoundaries: ReadonlyArray<number>) => {
+  updateSegments = (segmentBoundaries: ReadonlyArray<number>) => {
     this.micro.resizeSegmentsFromBoundaries(segmentBoundaries as number[]);
     const segments = this.micro.getSegments();
     this.setState({
       segments,
       segmentBoundaries
     });
+  };
+  updateBrightness = ([brightness]: ReadonlyArray<number>) => {
+    this.setState({ brightness });
+    this.setMicroBrightness(brightness);
   };
 
   onChange = (segmentBoundaries: ReadonlyArray<number>) => {
@@ -105,8 +104,10 @@ class MicroController extends Component<MicroControllerProps> {
     const {
       micro,
       setEffect,
+      updateSegments,
+      updateBrightness,
       handleIsActive,
-      state: { segmentBoundaries, domain, segments },
+      state: { segmentBoundaries, domain, segments, brightness },
     } = this;
     const totalLEDs = micro.getTotalLEDs();
     const segmentTabProps = {
@@ -114,58 +115,28 @@ class MicroController extends Component<MicroControllerProps> {
       segments,
       setEffect
     };
+    const brightnessSliderProps: BrightnessSliderProps = {
+      brightness,
+      onUpdate: updateBrightness
+    }
+    const segmentResizerProps: SegmentResizerProps = {
+      domain,
+      totalLEDs,
+      handleIsActive,
+      segmentBoundaries,
+      onUpdate: updateSegments,
+    }
     
     return (
       <Card.Body>
-        <input
-          type="range"
-          className="custom-range"
-          id="cowbell"
-          name="cowbell"
-          min="0"
-          max="255"
-          value={this.state.brightness.toString()}
-          onChange={this.changeBrightness}
-        ></input>
+        <BrightnessSlider 
+          {...brightnessSliderProps}>
+        </BrightnessSlider>
         <hr></hr>
-        <div style={{ height: 120, width: '100%' }}>
-          <Slider
-            mode={1}
-            step={1}
-            domain={domain}
-            rootStyle={sliderStyle}
-            onUpdate={this.onUpdate}
-            // onChange={this.onChange}
-            values={segmentBoundaries}
-          >
-            <Rail>{railProps => <TooltipRail {...railProps} />}</Rail>
-            <Handles>
-              {({ handles, activeHandleID, getHandleProps }) => (
-                <div className="slider-handles">
-                  {handles.map(handle => (
-                    <Handle
-                      key={handle.id}
-                      handle={handle}
-                      domain={domain}
-                      disabled={handleIsActive(handle)}
-                      isActive={handle.id === activeHandleID}
-                      getHandleProps={getHandleProps}
-                    />
-                  ))}
-                </div>
-              )}
-            </Handles>
-            <Tracks left={false} right={false}>
-              {({ tracks, getTrackProps }) => (
-                <div className="slider-tracks">
-                  {tracks.map(({ id, source, target }) => (
-                    <Track key={id} source={source} target={target} getTrackProps={getTrackProps} />
-                  ))}
-                </div>
-              )}
-            </Tracks>
-          </Slider>
-        </div>
+        <SegmentResizer
+          {...segmentResizerProps}>
+        </SegmentResizer>
+        <hr></hr>
         <LEDSegments
           {...segmentTabProps}
         ></LEDSegments>

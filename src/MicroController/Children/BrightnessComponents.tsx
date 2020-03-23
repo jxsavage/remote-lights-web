@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SliderItem } from "react-compound-slider";
-import "./tooltip.css";
+import "./brightness-tooltip.css";
 
 const { Component, Fragment } = React;
 
