@@ -1,7 +1,9 @@
 /* .App {
   text-align: center;
 } */
-
+.dropdown-toggle::after {
+  display: none !important;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

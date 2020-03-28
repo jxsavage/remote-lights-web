@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { SliderItem } from 'react-compound-slider';
-import {WebMicroSegment, WebMicroInfo} from '../Shared/MicroTypes';
+import {WebMicroSegment, WebMicroInfo, SplitSegment, MergeSegments} from '../Shared/MicroTypes';
 import { SharedMicroState } from 'src/Shared/MicroShared';
-import { WebEffect } from 'src/Shared/MicroCommands';
+import { WebEffect, Direction } from 'src/Shared/MicroCommands';
 import LEDSegments from './Children/LEDSegments';
-import SegmentResizer, { SegmentResizerProps } from './Children/SegmentResizer';
 import BrightnessSlider, { BrightnessSliderProps } from './Children/BrightnessSlider';
+import SegmentEditor, { SegmentEditorProps } from './Children/SegmentEditor';
 interface MicroControllerProps {
   socket: SocketIOClient.Socket;
   micro: WebMicroInfo;
@@ -73,12 +73,9 @@ class MicroController extends Component<MicroControllerProps> {
     this.setMicroBrightness(brightness);
   };
   updateSegments = (segmentBoundaries: ReadonlyArray<number>) => {
-    this.micro.resizeSegmentsFromBoundaries(segmentBoundaries as number[]);
-    const segments = this.micro.getSegments();
-    this.setState({
-      segments,
-      segmentBoundaries
-    });
+    const newSegmentsAndBoundaries = this.micro.resizeSegmentsFromBoundaries(segmentBoundaries as number[]);
+    //const segments = this.micro.getSegments();
+    this.setState(newSegmentsAndBoundaries);
   };
   updateBrightness = ([brightness]: ReadonlyArray<number>) => {
     this.setState({ brightness });
@@ -100,6 +97,14 @@ class MicroController extends Component<MicroControllerProps> {
     const segments = micro.getSegments();
     this.setState({segments});
   }
+  splitSegment: SplitSegment = (index: number, direction: Direction, newEffect: WebEffect) => {
+    const {state: {segments}, micro: {splitSegment}} = this;
+    this.setState(splitSegment(index, direction, newEffect, segments));
+  }
+  mergeSegments: MergeSegments = (index: number, direction: Direction) => {
+    const {state: {segments}, micro: {mergeSegments}} = this;
+    this.setState(mergeSegments(index, direction, segments));
+  }
   render() {
     const {
       micro,
@@ -107,6 +112,8 @@ class MicroController extends Component<MicroControllerProps> {
       updateSegments,
       updateBrightness,
       handleIsActive,
+      splitSegment,
+      mergeSegments,
       state: { segmentBoundaries, domain, segments, brightness },
     } = this;
     const totalLEDs = micro.getTotalLEDs();
@@ -115,31 +122,27 @@ class MicroController extends Component<MicroControllerProps> {
       segments,
       setEffect
     };
+    const segmentEditorProps: SegmentEditorProps = {
+      domain,
+      segments,
+      totalLEDs,
+      mergeSegments,
+      splitSegment,
+      updateSegments,
+      handleIsActive,
+      segmentBoundaries
+    }
     const brightnessSliderProps: BrightnessSliderProps = {
       brightness,
       onUpdate: updateBrightness
     }
-    const segmentResizerProps: SegmentResizerProps = {
-      domain,
-      totalLEDs,
-      handleIsActive,
-      segmentBoundaries,
-      onUpdate: updateSegments,
-    }
     
     return (
       <Card.Body>
-        <BrightnessSlider 
-          {...brightnessSliderProps}>
-        </BrightnessSlider>
+        <BrightnessSlider {...brightnessSliderProps}/>
+        <SegmentEditor {...segmentEditorProps}/>
         <hr></hr>
-        <SegmentResizer
-          {...segmentResizerProps}>
-        </SegmentResizer>
-        <hr></hr>
-        <LEDSegments
-          {...segmentTabProps}
-        ></LEDSegments>
+        <LEDSegments {...segmentTabProps}/>
       </Card.Body>
     );
   }

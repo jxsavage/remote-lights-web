@@ -44,7 +44,7 @@ function SegmentNav({segments, totalLEDs}: LEDSegmentsProps) {
     </Nav>
   )
 }
-function segmentTabWidth(totalLEDs: number, segmentLEDs: number, index: number, offset: number): React.CSSProperties {
+export function segmentTabWidth(totalLEDs: number, segmentLEDs: number, index: number, offset: number): React.CSSProperties {
   return {
     marginLeft: `${index === 0 ? (offset / totalLEDs * 100) : 0}%`,
     width: `${(segmentLEDs / totalLEDs) * 100}%`,
