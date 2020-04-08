@@ -8,7 +8,7 @@ import {
   ResizeSegmentsFromBoundariesStatePayload,
 } from 'Shared/reducers/remoteLights';
 import { WebMicroInfo } from 'Shared/MicroTypes';
-import { emitAndDispatchMicroAction, useRemoteLightsDispatch } from 'components/AppState';
+import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
 import { Handle, Track, TooltipRail } from './ResizerComponents';
 
 interface SegmentResizerProps {
@@ -27,7 +27,7 @@ function updateSegments(
       microId,
       payload: { segmentBoundaries },
     };
-    emitAndDispatchMicroAction(dispatch, resizeSegmentsFromBoundaries, payload);
+    emitAndDispatchMicroStateAction(dispatch, resizeSegmentsFromBoundaries, payload);
   };
 }
 const SegmentResizer:

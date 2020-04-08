@@ -4,7 +4,7 @@ import {
 } from 'react-compound-slider';
 import { Card } from 'react-bootstrap';
 import { setBrightness } from 'Shared/reducers/remoteLights';
-import { emitAndDispatchMicroAction, useRemoteLightsDispatch } from 'components/AppState';
+import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
 import { Handle, Track, TooltipRail } from './BrightnessComponents';
 
 export interface BrightnessSliderProps {
@@ -31,7 +31,7 @@ function BrightnessSlider(
   function updateBrightness(slider: readonly number[]): void {
     // eslint-disable-next-line no-shadow
     const [brightness] = slider;
-    emitAndDispatchMicroAction(dispatch, setBrightness, { payload: { brightness }, microId });
+    emitAndDispatchMicroStateAction(dispatch, setBrightness, { payload: { brightness }, microId });
   }
   return (
     <Card>

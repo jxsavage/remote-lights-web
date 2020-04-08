@@ -70,5 +70,5 @@ function useRemoteLightsDispatch(): RemoteLightDispatchContextProps {
   }
   return context;
 }
-export { emitAndDispatchMicroStateAction as emitAndDispatchMicroAction, useRemoteLightsDispatch, useRemoteLightsState };
+export { emitAndDispatchMicroStateAction, useRemoteLightsDispatch, useRemoteLightsState };
 export default RemoteLightsProvider;

@@ -7,7 +7,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { WebMicroSegment } from 'Shared/MicroTypes';
 import { WebEffect } from 'Shared/MicroCommands';
 import { setSegmentEffect, SetSegmentEffectStatePayload } from 'Shared/reducers/remoteLights';
-import { emitAndDispatchMicroAction, useRemoteLightsDispatch } from 'components/AppState';
+import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
 
 interface EffectTabContainerProps {
   segment: WebMicroSegment;
@@ -80,7 +80,7 @@ export const EffectTabContent: React.
         const { effect } = segment;
         function activateEffect(payload: SetSegmentEffectStatePayload) {
           return function emitAndDispatch(): void {
-            emitAndDispatchMicroAction(
+            emitAndDispatchMicroStateAction(
               dispatch, setSegmentEffect, payload,
             );
           };

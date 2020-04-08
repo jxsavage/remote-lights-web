@@ -13,7 +13,7 @@ import { WebEffect } from 'Shared/MicroCommands';
 import {
   splitSegment, mergeSegments, StateActions, MergeSegmentsStatePayload, SplitSegmentStatePayload,
 } from 'Shared/reducers/remoteLights';
-import { emitAndDispatchMicroAction, useRemoteLightsDispatch } from 'components/AppState';
+import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
 import { segmentTabWidth } from './LEDSegments';
 
 
@@ -46,7 +46,7 @@ const SegmentSplitter: React.FunctionComponent<SegmentSplitterProps> = ({
     payload: MergeSegmentsStatePayload,
   ) {
     return function merge(): void {
-      emitAndDispatchMicroAction(dispatch, mergeSegments, payload);
+      emitAndDispatchMicroStateAction(dispatch, mergeSegments, payload);
     };
   }
   return (
@@ -150,7 +150,7 @@ function SplitOptions({
     payload: SplitSegmentStatePayload,
   ) {
     return function () {
-      emitAndDispatchMicroAction(dispatch, splitSegment, payload);
+      emitAndDispatchMicroStateAction(dispatch, splitSegment, payload);
     };
   }
   return (
