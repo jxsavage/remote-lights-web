@@ -4,20 +4,19 @@ import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { WebMicroSegment } from 'Shared/MicroTypes';
-import { WebEffect } from 'Shared/MicroCommands';
+import { LEDSegment } from 'Shared/MicroTypes';
+import { MicroEffect, POSSIBLE_EFFECTS_STRINGS } from 'Shared/MicroCommands';
 import { setSegmentEffect, SetSegmentEffectStatePayload } from 'Shared/reducers/remoteLights';
 import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
 
 interface EffectTabContainerProps {
-  segment: WebMicroSegment;
+  segment: LEDSegment;
   segmentIndex: number;
   microId: string;
 }
 interface EffectTabContentProps extends EffectTabContainerProps {
   segmentIndex: number;
 }
-const POSSIBLE_EFFECTS = Object.values(WebEffect);
 export const EffectTabContainer: React.
   FunctionComponent<EffectTabContainerProps> = ({
   microId, segment, segmentIndex,
@@ -54,7 +53,7 @@ export const EffectTabContainer: React.
 export function EffectTab(): JSX.Element {
   return (
     <Nav variant="pills" className="flex-column">
-      {POSSIBLE_EFFECTS.map((effect) => (
+      {POSSIBLE_EFFECTS_STRINGS.map((effect) => (
         <Nav.Item key={effect}>
           <Nav.Link
             className="h5"
@@ -75,8 +74,7 @@ export const EffectTabContent: React.
   const dispatch = useRemoteLightsDispatch();
   return (
     <Tab.Content>
-      {POSSIBLE_EFFECTS.map((possibleEffect) => {
-        const possible = possibleEffect as WebEffect;
+      {POSSIBLE_EFFECTS_STRINGS.map((effectName, microEffect) => {
         const { effect } = segment;
         function activateEffect(payload: SetSegmentEffectStatePayload) {
           return function emitAndDispatch(): void {
@@ -87,20 +85,19 @@ export const EffectTabContent: React.
         }
         return (
           <Tab.Pane
-            key={possibleEffect}
-            eventKey={possibleEffect}
+            key={effectName}
+            eventKey={effectName}
           >
             <Card>
               <Card.Header className="h5">
-                {possibleEffect}
-                {' '}
+                {`${effectName} Settings`}
                 Settings
               </Card.Header>
               <Card.Body />
               <Card.Footer>
                 <ButtonGroup>
                   <Button
-                    disabled={possible === effect}
+                    disabled={effectName === MicroEffect[microEffect]}
                     onClick={activateEffect({ microId, payload: { effect, segmentIndex } })}
                     variant="info"
                   >

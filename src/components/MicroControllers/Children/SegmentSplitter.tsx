@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { WebMicroSegment } from 'Shared/MicroTypes';
+import { LEDSegment } from 'Shared/MicroTypes';
 import { DropdownButton, Dropdown, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -9,18 +9,13 @@ import {
   faExpandAlt,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import { WebEffect } from 'Shared/MicroCommands';
+import { MicroEffect, Direction, POSSIBLE_EFFECTS_STRINGS } from 'Shared/MicroCommands';
 import {
   splitSegment, mergeSegments, StateActions, MergeSegmentsStatePayload, SplitSegmentStatePayload,
 } from 'Shared/reducers/remoteLights';
 import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
 import { segmentTabWidth } from './LEDSegments';
 
-
-enum Direction {
-  Left,
-  Right
-}
 const mergeAddIcons = [faChevronLeft, faPlusCircle, faChevronRight];
 const splitIcons = [faChevronLeft, faExpandAlt, faChevronRight];
 
@@ -33,7 +28,7 @@ function iconProps(direction: Direction, icons: IconDefinition[]) {
 interface SegmentSplitterProps {
   microId: string;
   totalLEDs: number;
-  segments: WebMicroSegment[];
+  segments: LEDSegment[];
 }
 const mergeButtonStyles: React.CSSProperties = {
   maxWidth: '60px',
@@ -142,7 +137,6 @@ interface SplitOptionsProps {
   direction: Direction;
   dispatch: React.Dispatch<StateActions>;
 }
-const POSSIBLE_EFFECTS = Object.values(WebEffect) as WebEffect[];
 function SplitOptions({
   microId, segmentIndex, direction, dispatch,
 }: SplitOptionsProps) {
@@ -155,17 +149,17 @@ function SplitOptions({
   }
   return (
     <>
-      {POSSIBLE_EFFECTS.map((newEffect, index) => {
+      {POSSIBLE_EFFECTS_STRINGS.map((effectName, newEffect) => {
         const splitFn = splitOnClick({
           microId, payload: { segmentIndex, direction, newEffect },
         });
 
         return (
           <Dropdown.Item
-            key={index}
+            key={effectName}
             onClick={splitFn}
           >
-            {newEffect}
+            {effectName}
           </Dropdown.Item>
         );
       })}

@@ -1,17 +1,16 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import { WebMicroInfo } from 'Shared/MicroTypes';
+import { MicroState } from 'Shared/MicroTypes';
 import SegmentSplitter from './SegmentSplitter';
 import SegmentResizer from './SegmentResizer';
 
 interface SegmentEditorProps {
-  micro: WebMicroInfo;
+  micro: MicroState;
 }
 const SegmentEditor: React.FunctionComponent<SegmentEditorProps> = ({ micro }) => {
   const {
-    id, totalLEDs, segments,
+    microId, totalLEDs, segments,
   } = micro;
-  const microId = id;
   return (
     <Card>
       <Card.Header className="h3">Segment Editor</Card.Header>

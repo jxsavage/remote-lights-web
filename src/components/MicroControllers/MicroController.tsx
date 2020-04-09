@@ -1,22 +1,20 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import {
-  WebMicroInfo,
+  MicroState,
 } from 'Shared/MicroTypes';
-import { StateActions } from 'Shared/reducers/remoteLights';
 import LEDSegments from './Children/LEDSegments';
 import BrightnessSlider from './Children/BrightnessSlider';
 import SegmentEditor from './Children/SegmentEditor';
 
 interface MicroControllerProps {
-  micro: WebMicroInfo;
+  micro: MicroState;
 }
 const MicroController: React.
   FunctionComponent<MicroControllerProps> = ({ micro }) => {
   const {
-    id, brightness, totalLEDs, segments,
+    microId, brightness, totalLEDs, segments,
   } = micro;
-  const microId = id;
   return (
     <Card.Body>
       <BrightnessSlider {...{ microId, brightness }} />

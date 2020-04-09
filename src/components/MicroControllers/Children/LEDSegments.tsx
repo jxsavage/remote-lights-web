@@ -1,4 +1,4 @@
-import { WebMicroSegment } from 'Shared/MicroTypes';
+import { LEDSegment } from 'Shared/MicroTypes';
 import { Tab, Nav, Card } from 'react-bootstrap';
 import React from 'react';
 import { EffectTabContainer } from './EffectsTab';
@@ -11,7 +11,7 @@ const segmentButtonStyle: React.CSSProperties = {
 interface LEDSegmentsProps {
   microId: string;
   totalLEDs: number;
-  segments: WebMicroSegment[];
+  segments: LEDSegment[];
 }
 function LEDSegments(props: LEDSegmentsProps): JSX.Element {
   return (
@@ -36,7 +36,7 @@ export function segmentTabWidth(
 }
 interface SegmentTabContentProps {
   microId: string;
-  segments: WebMicroSegment[];
+  segments: LEDSegment[];
 }
 function SegmentNav({ segments, totalLEDs }: LEDSegmentsProps): JSX.Element {
   return (
@@ -61,7 +61,7 @@ function SegmentNav({ segments, totalLEDs }: LEDSegmentsProps): JSX.Element {
 export function SegmentTabContent({ segments, microId }: SegmentTabContentProps): JSX.Element {
   return (
     <Tab.Content>
-      {segments.map((segment: WebMicroSegment, segmentIndex: number) => {
+      {segments.map((segment: LEDSegment, segmentIndex: number) => {
         const props = {
           segment,
           microId,
@@ -92,7 +92,7 @@ export function SegmentTabContent({ segments, microId }: SegmentTabContentProps)
     </Tab.Content>
   );
 }
-function SegmentInfoCard({ effect, numLEDs, offset }: WebMicroSegment) {
+function SegmentInfoCard({ effect, numLEDs, offset }: LEDSegment) {
   return (
     <Card>
       <Card.Header className="h4">

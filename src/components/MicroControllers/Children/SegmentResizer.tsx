@@ -7,12 +7,12 @@ import {
   StateActions, resizeSegmentsFromBoundaries,
   ResizeSegmentsFromBoundariesStatePayload,
 } from 'Shared/reducers/remoteLights';
-import { WebMicroInfo } from 'Shared/MicroTypes';
+import { MicroState } from 'Shared/MicroTypes';
 import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
 import { Handle, Track, TooltipRail } from './ResizerComponents';
 
 interface SegmentResizerProps {
-  micro: WebMicroInfo;
+  micro: MicroState;
 }
 const sliderStyle: React.CSSProperties = {
   position: 'relative',
@@ -33,18 +33,9 @@ function updateSegments(
 const SegmentResizer:
 React.FunctionComponent<SegmentResizerProps> = ({ micro }) => {
   const dispatch = useRemoteLightsDispatch();
-  const { id, totalLEDs, segmentBoundaries } = micro;
+  const { microId, totalLEDs, segmentBoundaries } = micro;
   const boundaries = segmentBoundaries.slice();
-  const microId = id;
 
-  // function updateSegments(boundaries: number[]) {
-  //   const segmentBoundaries = boundaries.slice();
-  //   const payload: ResizeSegmentsFromBoundariesPayload = {
-  //     microId,
-  //     segmentBoundaries
-  //   }
-  //   emitAndDispatchMicroAction(dispatch, resizeSegmentsFromBoundaries, payload);
-  // }
   return (
     <div style={{
       height: 'fit-content', width: '100%', paddingBottom: '3rem', paddingTop: '1rem',
