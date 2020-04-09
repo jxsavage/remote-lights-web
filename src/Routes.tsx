@@ -2,14 +2,9 @@ import React from 'react';
 import { Route, Switch } from 'react-router';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link, BrowserRouter as Router } from 'react-router-dom';
-import { StateActions, RemoteLightsState } from './Shared/reducers/remoteLights';
 import MicroControllersPage from './components/MicroControllers/MicroControllersPage';
 import { reInitAppState } from './components/AppState';
 
-interface RoutesProps {
-  dispatch: React.Dispatch<StateActions>;
-  state: RemoteLightsState;
-}
 const Routes: React.FunctionComponent = () => (
   <Router>
     <Navbar>
