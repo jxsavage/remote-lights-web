@@ -1,9 +1,10 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link, BrowserRouter as Router } from 'react-router-dom';
 import { StateActions, RemoteLightsState } from './Shared/reducers/remoteLights';
 import MicroControllersPage from './components/MicroControllers/MicroControllersPage';
+import { reInitAppState } from './components/AppState';
 
 interface RoutesProps {
   dispatch: React.Dispatch<StateActions>;
@@ -23,14 +24,11 @@ const Routes: React.FunctionComponent = () => (
             Class
           </Link>
         </Nav.Item>
-        <Nav.Item>
-          <Link
-            to="/hooks"
-            className="nav-link"
-          >
-            Hooks
-          </Link>
-        </Nav.Item>
+        <Button
+          onClick={reInitAppState}
+        >
+          Reset State
+        </Button>
       </Nav>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
     </Navbar>

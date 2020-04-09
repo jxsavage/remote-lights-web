@@ -31,7 +31,7 @@ const RemoteLightsProvider: React.FunctionComponent = ({ children }) => {
   useEffect(() => {
     // eslint-disable-next-line no-shadow
     socket.on('remoteLightsStateAction', (stateAction: StateActions) => {
-      console.log(`useEffect stateAction: ${JSON.stringify(state, null, '  ')}`);
+      console.log(`useEffect stateAction: ${JSON.stringify(stateAction, null, '  ')}`);
       dispatch(stateAction);
     });
     return function removeListeners(): void {
@@ -70,5 +70,11 @@ function useRemoteLightsDispatch(): RemoteLightDispatchContextProps {
   }
   return context;
 }
-export { emitAndDispatchMicroStateAction, useRemoteLightsDispatch, useRemoteLightsState };
+function reInitAppState() {
+  socket.emit('reInitAppState');
+}
+export {
+  emitAndDispatchMicroStateAction, useRemoteLightsDispatch, useRemoteLightsState,
+  reInitAppState,
+};
 export default RemoteLightsProvider;
