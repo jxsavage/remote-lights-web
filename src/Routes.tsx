@@ -34,5 +34,4 @@ const Routes: React.FunctionComponent = () => (
     </Switch>
   </Router>
 );
-const About = () => (<h2>About</h2>);
 export default Routes;

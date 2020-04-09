@@ -9,7 +9,7 @@ import {
   faExpandAlt,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import { MicroEffect, Direction, POSSIBLE_EFFECTS_STRINGS } from 'Shared/MicroCommands';
+import { Direction, POSSIBLE_EFFECTS_STRINGS } from 'Shared/MicroCommands';
 import {
   splitSegment, mergeSegments, StateActions, MergeSegmentsStatePayload, SplitSegmentStatePayload,
 } from 'Shared/reducers/remoteLights';
@@ -139,11 +139,11 @@ interface SplitOptionsProps {
 }
 function SplitOptions({
   microId, segmentIndex, direction, dispatch,
-}: SplitOptionsProps) {
+}: SplitOptionsProps): JSX.Element {
   function splitOnClick(
     payload: SplitSegmentStatePayload,
   ) {
-    return function () {
+    return function splitOnCLick(): void {
       emitAndDispatchMicroStateAction(dispatch, splitSegment, payload);
     };
   }
@@ -172,7 +172,7 @@ interface SegmentIconProps {
   direction: Direction;
   icons: IconDefinition[];
 }
-function SegmentIcons({ direction, icons }: SegmentIconProps) {
+function SegmentIcons({ direction, icons }: SegmentIconProps): JSX.Element {
   const [leftIcon, actionIcon, rightIcon] = icons;
   return (
     <>

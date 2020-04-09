@@ -70,7 +70,7 @@ function useRemoteLightsDispatch(): RemoteLightDispatchContextProps {
   }
   return context;
 }
-function reInitAppState() {
+function reInitAppState(): void {
   socket.emit('reInitAppState');
 }
 export {

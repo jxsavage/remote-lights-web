@@ -92,7 +92,7 @@ export function SegmentTabContent({ segments, microId }: SegmentTabContentProps)
     </Tab.Content>
   );
 }
-function SegmentInfoCard({ effect, numLEDs, offset }: LEDSegment) {
+function SegmentInfoCard({ effect, numLEDs, offset }: LEDSegment): JSX.Element {
   return (
     <Card>
       <Card.Header className="h4">
