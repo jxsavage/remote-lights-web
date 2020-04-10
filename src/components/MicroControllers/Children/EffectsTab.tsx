@@ -31,7 +31,7 @@ export const EffectTabContainer: React.
       <Card.Body>
         <Tab.Container
           id="left-tabs-example"
-          defaultActiveKey={effect}
+          defaultActiveKey={MicroEffect[effect]}
         >
           <Row>
             <Col sm={3}>
@@ -91,14 +91,15 @@ export const EffectTabContent: React.
             <Card>
               <Card.Header className="h5">
                 {`${effectName} Settings`}
-                Settings
               </Card.Header>
               <Card.Body />
               <Card.Footer>
                 <ButtonGroup>
                   <Button
-                    disabled={effectName === MicroEffect[microEffect]}
-                    onClick={activateEffect({ microId, payload: { effect, segmentIndex } })}
+                    disabled={effectName === MicroEffect[effect]}
+                    onClick={activateEffect(
+                      { microId, payload: { effect: microEffect, segmentIndex } },
+                    )}
                     variant="info"
                   >
                     Activate
