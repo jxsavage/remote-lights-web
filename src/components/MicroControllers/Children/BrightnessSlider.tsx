@@ -5,10 +5,11 @@ import {
 import { Card } from 'react-bootstrap';
 import { setBrightness } from 'Shared/reducers/remoteLights';
 import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
+import { MicroId } from 'Shared/MicroTypes';
 import { Handle, Track, TooltipRail } from './BrightnessComponents';
 
 export interface BrightnessSliderProps {
-  microId: string;
+  microId: MicroId;
   brightness: number;
 }
 const sliderStyle: React.CSSProperties = {

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { LEDSegment } from 'Shared/MicroTypes';
+import { LEDSegment, MicroId } from 'Shared/MicroTypes';
 import { DropdownButton, Dropdown, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -26,7 +26,7 @@ function iconProps(direction: Direction, icons: IconDefinition[]) {
   };
 }
 interface SegmentSplitterProps {
-  microId: string;
+  microId: MicroId;
   totalLEDs: number;
   segments: LEDSegment[];
 }
@@ -132,7 +132,7 @@ const SegmentSplitter: React.FunctionComponent<SegmentSplitterProps> = ({
 };
 
 interface SplitOptionsProps {
-  microId: string;
+  microId: MicroId;
   segmentIndex: number;
   direction: Direction;
   dispatch: React.Dispatch<StateActions>;

@@ -1,4 +1,4 @@
-import { LEDSegment } from 'Shared/MicroTypes';
+import { LEDSegment, MicroId } from 'Shared/MicroTypes';
 import { Tab, Nav, Card } from 'react-bootstrap';
 import React from 'react';
 import { EffectTabContainer } from './EffectsTab';
@@ -9,7 +9,7 @@ const segmentButtonStyle: React.CSSProperties = {
 };
 
 interface LEDSegmentsProps {
-  microId: string;
+  microId: MicroId;
   totalLEDs: number;
   segments: LEDSegment[];
 }
@@ -35,7 +35,7 @@ export function segmentTabWidth(
   };
 }
 interface SegmentTabContentProps {
-  microId: string;
+  microId: MicroId;
   segments: LEDSegment[];
 }
 function SegmentNav({ segments, totalLEDs }: LEDSegmentsProps): JSX.Element {

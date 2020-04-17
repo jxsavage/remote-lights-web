@@ -7,7 +7,7 @@ import {
   StateActions, resizeSegmentsFromBoundaries,
   ResizeSegmentsFromBoundariesStatePayload,
 } from 'Shared/reducers/remoteLights';
-import { MicroState } from 'Shared/MicroTypes';
+import { MicroState, MicroId } from 'Shared/MicroTypes';
 import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
 import { Handle, Track, TooltipRail } from './ResizerComponents';
 
@@ -20,7 +20,7 @@ const sliderStyle: React.CSSProperties = {
   margin: '3rem auto',
 };
 function updateSegments(
-  microId: string, dispatch: React.Dispatch<StateActions>,
+  microId: MicroId, dispatch: React.Dispatch<StateActions>,
 ) {
   return function updateSegment(segmentBoundaries: number[]): void {
     const payload: ResizeSegmentsFromBoundariesStatePayload = {

@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { LEDSegment } from 'Shared/MicroTypes';
+import { LEDSegment, MicroId } from 'Shared/MicroTypes';
 import { MicroEffect, POSSIBLE_EFFECTS_STRINGS } from 'Shared/MicroCommands';
 import { setSegmentEffect, SetSegmentEffectStatePayload } from 'Shared/reducers/remoteLights';
 import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
@@ -12,7 +12,7 @@ import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'compon
 interface EffectTabContainerProps {
   segment: LEDSegment;
   segmentIndex: number;
-  microId: string;
+  microId: MicroId;
 }
 interface EffectTabContentProps extends EffectTabContainerProps {
   segmentIndex: number;
