@@ -53,7 +53,7 @@ const emitAndDispatchMicroStateAction = <A extends StateActions, P extends State
   payload: P,
 ): void => {
   const action = actionCreator(payload);
-  // socket.emit('remoteLightsStateAction', action);
+  socket.emit('remoteLightsStateAction', action);
   dispatch(action);
 };
 function useRemoteLightsState(): RemoteLightsStateContextProps {
