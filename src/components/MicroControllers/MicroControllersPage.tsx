@@ -1,10 +1,10 @@
 import React from 'react';
-import { useRemoteLightsState } from 'components/AppState';
+import { useShallowRootSelector } from 'components/RootStateProvider';
 import MicroController from './MicroController';
 
 const MicroControllersPage:
 React.FunctionComponent = () => {
-  const { allMicroIds, byMicroId } = useRemoteLightsState();
+  const allMicroIds = useShallowRootSelector((state) => state.remoteLightsEntity.micros.allIds);
   return (
     <div className="App card">
       <div className="h1 card-header">MicroControllers</div>
@@ -17,7 +17,7 @@ React.FunctionComponent = () => {
             </div>
             <MicroController
               key={microId}
-              micro={byMicroId[microId]}
+              microId={microId}
             />
           </div>
         ))}

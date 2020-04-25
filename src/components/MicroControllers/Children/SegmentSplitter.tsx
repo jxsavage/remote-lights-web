@@ -1,122 +1,62 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { LEDSegment, MicroId } from 'Shared/MicroTypes';
 import { DropdownButton, Dropdown, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlusCircle, faChevronLeft, faChevronRight,
-  faExpandAlt,
-  IconDefinition,
+  faExpandAlt, IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import { Direction, POSSIBLE_EFFECTS_STRINGS } from 'Shared/MicroCommands';
+import { POSSIBLE_EFFECTS_STRINGS } from 'Shared/MicroCommands';
+import { useDispatch } from 'react-redux';
+import { RootStateDispatch, useShallowRootSelector } from 'components/RootStateProvider';
 import {
-  splitSegment, mergeSegments, StateActions, MergeSegmentsStatePayload, SplitSegmentStatePayload,
-} from 'Shared/reducers/remoteLights';
-import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
+  splitSegment, mergeSegments, convertToEmittableAction,
+  MicroState, LEDSegment, MicroEffect, Direction,
+} from 'Shared/store';
 import { segmentTabWidth } from './LEDSegments';
 
-const mergeAddIcons = [faChevronLeft, faPlusCircle, faChevronRight];
-const splitIcons = [faChevronLeft, faExpandAlt, faChevronRight];
 
-function iconProps(direction: Direction, icons: IconDefinition[]) {
-  return {
-    icons,
-    direction,
-  };
-}
 interface SegmentSplitterProps {
-  microId: MicroId;
-  totalLEDs: number;
-  segments: LEDSegment[];
+  segments: MicroState['segments'];
+  totalLEDs: MicroState['totalLEDs'];
 }
 const mergeButtonStyles: React.CSSProperties = {
   maxWidth: '60px',
 };
 const SegmentSplitter: React.FunctionComponent<SegmentSplitterProps> = ({
-  segments, totalLEDs, microId,
+  segments, totalLEDs,
 }) => {
-  const dispatch = useRemoteLightsDispatch();
-  function mergeOnClick(
-    payload: MergeSegmentsStatePayload,
-  ) {
-    return function merge(): void {
-      emitAndDispatchMicroStateAction(dispatch, mergeSegments, payload);
-    };
-  }
+  const LEDSegments = useShallowRootSelector(
+    (state) => segments.map(
+      (segId) => state.remoteLightsEntity.segments.byId[segId],
+    ),
+  );
   return (
     <div className="w-100">
-      {/* eslint-disable-next-line no-shadow */}
-      {segments.map(({ offset, numLEDs }, segmentIndex, segments) => {
+      {LEDSegments.map((segment, segmentIndex) => {
         const buttons: JSX.Element[] = [];
-        const mergeAddLeftProps = iconProps(Direction.Left, mergeAddIcons);
-        const mergeLeftFn = mergeOnClick(
-          { microId, payload: { direction: Direction.Left, segmentIndex } },
-        );
-        const mergeLeftButton = (
-          <Button
-            key={`mergeLeft${segmentIndex}`}
-            onClick={mergeLeftFn}
-            style={mergeButtonStyles}
-            id={`mergeLeft${segmentIndex}`}
-          >
-            <SegmentIcons {...mergeAddLeftProps} />
-          </Button>
-        );
-        const splitLeftProps = iconProps(Direction.Left, splitIcons);
-        const splitRightProps = iconProps(Direction.Right, splitIcons);
-        const splitLeftOptionProps = {
-          microId,
-          segmentIndex,
-          direction: Direction.Left,
-          dispatch,
-        };
-        const splitRightOptionProps = {
-          microId,
-          segmentIndex,
-          direction: Direction.Right,
-          dispatch,
-        };
-        const splitButtons = (
-          <React.Fragment key={`splitRightOrLeft${segmentIndex}`}>
-            <DropdownButton
-              as={ButtonGroup}
-              title={<SegmentIcons {...splitLeftProps} />}
-              id="add-start"
-            >
-              <SplitOptions {...splitLeftOptionProps} />
-            </DropdownButton>
-            <DropdownButton
-              as={ButtonGroup}
-              title={<SegmentIcons {...splitRightProps} />}
-              id="add-end"
-            >
-              <SplitOptions {...splitRightOptionProps} />
-            </DropdownButton>
-          </React.Fragment>
-        );
-        const mergeAddRightProps = iconProps(Direction.Right, mergeAddIcons);
-        const mergeRightFn = mergeOnClick(
-          { microId, payload: { direction: Direction.Right, segmentIndex } },
-        );
-        const mergeRightButton = (
-          <Button
-            key={`mergeRight${segmentIndex}`}
-            onClick={mergeRightFn}
-            style={mergeButtonStyles}
-            id={`mergeRight${segmentIndex}`}
-          >
-            <SegmentIcons {...mergeAddRightProps} />
-          </Button>
-        );
         if (segmentIndex !== 0) {
-          buttons.push(mergeLeftButton);
+          buttons.push((
+            <MergeButton {
+              ...{ direction: Direction.Left, segmentIndex, segment }
+            }
+            />
+          ));
         }
-        buttons.push(splitButtons);
-        if (segmentIndex !== (segments.length - 1)) {
-          buttons.push(mergeRightButton);
+        const { microId } = segment;
+        buttons.push((
+          <SplitSegmentButtons {...{ microId, segmentIndex }} />
+        ));
+        if (segmentIndex !== (LEDSegments.length - 1)) {
+          buttons.push((
+            <MergeButton {
+              ...{ direction: Direction.Right, segmentIndex, segment }
+            }
+            />
+          ));
         }
-
+        const { numLEDs, offset } = segment;
         return (
           <ButtonGroup
             key={`SplitMergeButtons${segmentIndex}`}
@@ -130,43 +70,100 @@ const SegmentSplitter: React.FunctionComponent<SegmentSplitterProps> = ({
     </div>
   );
 };
-
+/**
+ * Merge Button
+ */
+const mergeIcons = [faChevronLeft, faPlusCircle, faChevronRight];
+interface MergeButtonProps {
+  direction: Direction; segmentIndex: number; segment: LEDSegment;
+}
+const MergeButton: React.FunctionComponent<MergeButtonProps> = (
+  { direction, segmentIndex, segment: { microId, segmentId } },
+) => {
+  const dispatch: RootStateDispatch = useDispatch();
+  const mergeOnClick = (): void => {
+    dispatch(convertToEmittableAction(mergeSegments({
+      direction, microId, segmentId, segmentIndex,
+    })));
+  };
+  return (
+    <Button
+      onClick={mergeOnClick}
+      style={mergeButtonStyles}
+    >
+      <SegmentIcons {...{ direction, icons: mergeIcons }} />
+    </Button>
+  );
+};
+/**
+ * Split Segment Buttons
+ */
+interface SplitSegmentButtonsProps {
+  segmentIndex: number;
+  microId: MicroState['microId'];
+}
+const splitIcons = [faChevronLeft, faExpandAlt, faChevronRight];
+const SplitSegmentButtons:
+React.FunctionComponent<SplitSegmentButtonsProps> = (
+  { microId, segmentIndex },
+) => (
+  <React.Fragment key={`splitRightOrLeft${segmentIndex}`}>
+    <DropdownButton
+      as={ButtonGroup}
+      title={<SegmentIcons {...{ direction: Direction.Left, icons: splitIcons }} />}
+      id="add-start"
+    >
+      <SplitOptions {...{ direction: Direction.Left, segmentIndex, microId }} />
+    </DropdownButton>
+    <DropdownButton
+      as={ButtonGroup}
+      title={<SegmentIcons {...{ direction: Direction.Right, icons: splitIcons }} />}
+      id="add-end"
+    >
+      <SplitOptions {...{ direction: Direction.Right, segmentIndex, microId }} />
+    </DropdownButton>
+  </React.Fragment>
+);
 interface SplitOptionsProps {
-  microId: MicroId;
+  microId: MicroState['microId'];
   segmentIndex: number;
   direction: Direction;
-  dispatch: React.Dispatch<StateActions>;
 }
-function SplitOptions({
-  microId, segmentIndex, direction, dispatch,
-}: SplitOptionsProps): JSX.Element {
-  function splitOnClick(
-    payload: SplitSegmentStatePayload,
-  ) {
-    return function splitOnCLick(): void {
-      emitAndDispatchMicroStateAction(dispatch, splitSegment, payload);
-    };
-  }
+const SplitOptions:
+React.FunctionComponent<SplitOptionsProps> = ({
+  microId, segmentIndex, direction,
+}: SplitOptionsProps) => (
+  <>
+    {POSSIBLE_EFFECTS_STRINGS.map((effectName, newEffect) => (
+      <SplitSegmentDropdownItem {...{
+        direction, effectName, segmentIndex, newEffect, microId, key: effectName,
+      }}
+      />
+    ))}
+  </>
+);
+interface SplitSegmentDropdownItemProps {
+  direction: Direction; segmentIndex: number; newEffect: MicroEffect;
+  microId: MicroState['microId']; effectName: string | MicroEffect;
+}
+const SplitSegmentDropdownItem:
+React.FunctionComponent<SplitSegmentDropdownItemProps> = ({
+  direction, microId, newEffect, segmentIndex, effectName,
+}) => {
+  const dispatch: RootStateDispatch = useDispatch();
+  const splitOnClick = (): void => {
+    dispatch(convertToEmittableAction(splitSegment({
+      direction, segmentIndex, newEffect, microId,
+    })));
+  };
   return (
-    <>
-      {POSSIBLE_EFFECTS_STRINGS.map((effectName, newEffect) => {
-        const splitFn = splitOnClick({
-          microId, payload: { segmentIndex, direction, newEffect },
-        });
-
-        return (
-          <Dropdown.Item
-            key={effectName}
-            onClick={splitFn}
-          >
-            {effectName}
-          </Dropdown.Item>
-        );
-      })}
-    </>
+    <Dropdown.Item
+      onClick={splitOnClick}
+    >
+      {effectName}
+    </Dropdown.Item>
   );
-}
-
+};
 
 interface SegmentIconProps {
   direction: Direction;

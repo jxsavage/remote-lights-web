@@ -1,11 +1,11 @@
 import React from 'react';
-import AppStateDispatchProvider from 'components/AppState';
+import RootStateProvider from 'components/RootStateProvider';
 import Routes from 'Routes';
 
 const App = (): JSX.Element => (
-  <AppStateDispatchProvider>
+  <RootStateProvider>
     <Routes />
-  </AppStateDispatchProvider>
+  </RootStateProvider>
 );
 
 export default App;

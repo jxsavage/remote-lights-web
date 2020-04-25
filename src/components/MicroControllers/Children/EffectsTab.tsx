@@ -4,23 +4,19 @@ import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { LEDSegment, MicroId } from 'Shared/MicroTypes';
-import { MicroEffect, POSSIBLE_EFFECTS_STRINGS } from 'Shared/MicroCommands';
-import { setSegmentEffect, SetSegmentEffectStatePayload } from 'Shared/reducers/remoteLights';
-import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
+
+import { useDispatch } from 'react-redux';
+import { RootStateDispatch } from 'components/RootStateProvider';
+import {
+  setSegmentEffect, convertToEmittableAction,
+  POSSIBLE_EFFECTS_STRINGS, LEDSegment, MicroEffect,
+} from 'Shared/store';
 
 interface EffectTabContainerProps {
   segment: LEDSegment;
-  segmentIndex: number;
-  microId: MicroId;
 }
-interface EffectTabContentProps extends EffectTabContainerProps {
-  segmentIndex: number;
-}
-export const EffectTabContainer: React.
-  FunctionComponent<EffectTabContainerProps> = ({
-  microId, segment, segmentIndex,
-}) => {
+export const EffectTabContainer:
+React.FunctionComponent<EffectTabContainerProps> = ({ segment }) => {
   const { effect } = segment;
 
   return (
@@ -38,11 +34,7 @@ export const EffectTabContainer: React.
               <EffectTab />
             </Col>
             <Col sm={9}>
-              <EffectTabContent
-                {...{
-                  microId, segment, segmentIndex,
-                }}
-              />
+              <EffectTabContent {...{ segment }} />
             </Col>
           </Row>
         </Tab.Container>
@@ -66,53 +58,56 @@ export function EffectTab(): JSX.Element {
     </Nav>
   );
 }
-
-export const EffectTabContent: React.
-  FunctionComponent<EffectTabContentProps> = ({
-  microId, segment, segmentIndex,
-}) => {
-  const dispatch = useRemoteLightsDispatch();
+interface EffectTabContentProps {
+  segment: LEDSegment;
+}
+export const EffectTabContent:
+React.FunctionComponent<EffectTabContentProps> = ({ segment }) => (
+  <Tab.Content>
+    {POSSIBLE_EFFECTS_STRINGS.map((effectName, effect) => (
+      <Tab.Pane
+        key={effectName}
+        eventKey={effectName}
+      >
+        <Card>
+          <Card.Header className="h5">
+            {`${effectName} Settings`}
+          </Card.Header>
+          <Card.Body />
+          <Card.Footer>
+            <ButtonGroup>
+              <ActivateEffectButton {...{ segment, effect }} />
+            </ButtonGroup>
+          </Card.Footer>
+        </Card>
+      </Tab.Pane>
+    ))}
+  </Tab.Content>
+);
+interface ActivateEffectButtonProps {
+  effect: MicroEffect;
+  segment: LEDSegment;
+}
+const ActivateEffectButton:
+React.FunctionComponent<ActivateEffectButtonProps> = (
+  { segment, effect },
+) => {
+  const dispatch = useDispatch<RootStateDispatch>();
+  const currentEffect = segment.effect;
+  const { microId, segmentId } = segment;
+  const activateEffect = (): void => {
+    dispatch(convertToEmittableAction(setSegmentEffect({
+      microId, effect, segmentId,
+    })));
+  };
   return (
-    <Tab.Content>
-      {POSSIBLE_EFFECTS_STRINGS.map((effectName, microEffect) => {
-        const { effect } = segment;
-        function activateEffect(payload: SetSegmentEffectStatePayload) {
-          return function emitAndDispatch(): void {
-            emitAndDispatchMicroStateAction(
-              dispatch, setSegmentEffect, payload,
-            );
-          };
-        }
-        return (
-          <Tab.Pane
-            key={effectName}
-            eventKey={effectName}
-          >
-            <Card>
-              <Card.Header className="h5">
-                {`${effectName} Settings`}
-              </Card.Header>
-              <Card.Body />
-              <Card.Footer>
-                <ButtonGroup>
-                  <Button
-                    disabled={effectName === MicroEffect[effect]}
-                    onClick={activateEffect(
-                      { microId, payload: { effect: microEffect, segmentIndex } },
-                    )}
-                    variant="info"
-                  >
-                    Activate
-                  </Button>
-                  {/* <Button variant="warning">Set Effect</Button> */}
-                </ButtonGroup>
-              </Card.Footer>
-            </Card>
-          </Tab.Pane>
-        );
-      })}
-    </Tab.Content>
+    <Button
+      disabled={effect === currentEffect}
+      onClick={activateEffect}
+      variant="info"
+    >
+      Activate
+    </Button>
   );
 };
-
 export default EffectTabContainer;

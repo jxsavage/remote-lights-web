@@ -1,14 +1,13 @@
-/* eslint-disable max-len */
 import React from 'react';
 import {
   Rail, Handles, Tracks, Slider,
 } from 'react-compound-slider';
+import { useDispatch } from 'react-redux';
+import { RootStateDispatch } from 'components/RootStateProvider';
 import {
-  StateActions, resizeSegmentsFromBoundaries,
-  ResizeSegmentsFromBoundariesStatePayload,
-} from 'Shared/reducers/remoteLights';
-import { MicroState, MicroId } from 'Shared/MicroTypes';
-import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
+  resizeSegmentsFromBoundaries, convertToEmittableAction,
+  MicroState,
+} from 'Shared/store';
 import { Handle, Track, TooltipRail } from './ResizerComponents';
 
 interface SegmentResizerProps {
@@ -19,40 +18,31 @@ const sliderStyle: React.CSSProperties = {
   width: '100%',
   margin: '3rem auto',
 };
-function updateSegments(
-  microId: MicroId, dispatch: React.Dispatch<StateActions>,
-) {
-  return function updateSegment(segmentBoundaries: number[]): void {
-    const payload: ResizeSegmentsFromBoundariesStatePayload = {
-      microId,
-      payload: { segmentBoundaries },
-    };
-    emitAndDispatchMicroStateAction(dispatch, resizeSegmentsFromBoundaries, payload);
-  };
-}
 const SegmentResizer:
 React.FunctionComponent<SegmentResizerProps> = ({ micro }) => {
-  const dispatch = useRemoteLightsDispatch();
+  const dispatch = useDispatch<RootStateDispatch>();
   const { microId, totalLEDs, segmentBoundaries } = micro;
-  const boundaries = segmentBoundaries.slice();
-
+  const resizeOnClick = (boundaries: readonly number[]): void => {
+    const bounds = boundaries.slice();
+    dispatch(convertToEmittableAction(resizeSegmentsFromBoundaries({
+      microId, segmentBoundaries: bounds,
+    })));
+  };
   return (
     <div style={{
       height: 'fit-content', width: '100%', paddingBottom: '3rem', paddingTop: '1rem',
     }}
     >
       <Slider
-        microId={microId}
         mode={1}
         step={1}
         domain={[0, totalLEDs]}
         rootStyle={sliderStyle}
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-        onUpdate={updateSegments(microId, dispatch)}
+        onUpdate={resizeOnClick}
       // onChange={this.onChange}
-        values={boundaries}
+        values={segmentBoundaries}
       >
+        {/* eslint-disable-next-line max-len */}
         <Rail>{({ activeHandleID, getEventData, getRailProps }): JSX.Element => <TooltipRail {...{ activeHandleID, getEventData, getRailProps }} />}</Rail>
         <Handles>
           {({ handles, activeHandleID, getHandleProps }): JSX.Element => (

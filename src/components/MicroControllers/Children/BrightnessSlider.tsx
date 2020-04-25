@@ -3,13 +3,17 @@ import {
   Slider, Rail, Handles, Tracks,
 } from 'react-compound-slider';
 import { Card } from 'react-bootstrap';
-import { setBrightness } from 'Shared/reducers/remoteLights';
-import { emitAndDispatchMicroStateAction, useRemoteLightsDispatch } from 'components/AppState';
-import { MicroId } from 'Shared/MicroTypes';
+
+import { useDispatch } from 'react-redux';
+import { RootStateDispatch } from 'components/RootStateProvider';
+import {
+  setMicroBrightness, convertToEmittableAction,
+  MicroState,
+} from 'Shared/store';
 import { Handle, Track, TooltipRail } from './BrightnessComponents';
 
 export interface BrightnessSliderProps {
-  microId: MicroId;
+  microId: MicroState['microId'];
   brightness: number;
 }
 const sliderStyle: React.CSSProperties = {
@@ -28,12 +32,14 @@ function calcPercent(brightness: number): number {
 function BrightnessSlider(
   { brightness, microId }: BrightnessSliderProps,
 ): JSX.Element {
-  const dispatch = useRemoteLightsDispatch();
-  function updateBrightness(slider: readonly number[]): void {
+  const dispatch = useDispatch<RootStateDispatch>();
+  const updateBrightness = (slider: readonly number[]): void => {
     // eslint-disable-next-line no-shadow
     const [brightness] = slider;
-    emitAndDispatchMicroStateAction(dispatch, setBrightness, { payload: { brightness }, microId });
-  }
+    dispatch(convertToEmittableAction(setMicroBrightness({
+      microId, brightness,
+    })));
+  };
   return (
     <Card>
       <Card.Header className="h3">{`Brightness: ${calcPercent(brightness)}%`}</Card.Header>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import { MicroState } from 'Shared/MicroTypes';
+import { MicroState } from 'Shared/store';
 import SegmentSplitter from './SegmentSplitter';
 import SegmentResizer from './SegmentResizer';
 
