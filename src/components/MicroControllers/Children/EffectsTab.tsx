@@ -14,9 +14,10 @@ import {
 
 interface EffectTabContainerProps {
   segment: LEDSegment;
+  segmentIndex: number;
 }
 export const EffectTabContainer:
-React.FunctionComponent<EffectTabContainerProps> = ({ segment }) => {
+React.FunctionComponent<EffectTabContainerProps> = ({ segment, segmentIndex }) => {
   const { effect } = segment;
 
   return (
@@ -34,7 +35,7 @@ React.FunctionComponent<EffectTabContainerProps> = ({ segment }) => {
               <EffectTab />
             </Col>
             <Col sm={9}>
-              <EffectTabContent {...{ segment }} />
+              <EffectTabContent {...{ segment, segmentIndex }} />
             </Col>
           </Row>
         </Tab.Container>
@@ -60,9 +61,10 @@ export function EffectTab(): JSX.Element {
 }
 interface EffectTabContentProps {
   segment: LEDSegment;
+  segmentIndex: number;
 }
 export const EffectTabContent:
-React.FunctionComponent<EffectTabContentProps> = ({ segment }) => (
+React.FunctionComponent<EffectTabContentProps> = ({ segment, segmentIndex }) => (
   <Tab.Content>
     {POSSIBLE_EFFECTS_STRINGS.map((effectName, effect) => (
       <Tab.Pane
@@ -76,7 +78,7 @@ React.FunctionComponent<EffectTabContentProps> = ({ segment }) => (
           <Card.Body />
           <Card.Footer>
             <ButtonGroup>
-              <ActivateEffectButton {...{ segment, effect }} />
+              <ActivateEffectButton {...{ segment, effect, segmentIndex }} />
             </ButtonGroup>
           </Card.Footer>
         </Card>
@@ -87,17 +89,18 @@ React.FunctionComponent<EffectTabContentProps> = ({ segment }) => (
 interface ActivateEffectButtonProps {
   effect: MicroEffect;
   segment: LEDSegment;
+  segmentIndex: number;
 }
 const ActivateEffectButton:
 React.FunctionComponent<ActivateEffectButtonProps> = (
-  { segment, effect },
+  { segment, effect, segmentIndex },
 ) => {
   const dispatch = useDispatch<RootStateDispatch>();
   const currentEffect = segment.effect;
   const { microId, segmentId } = segment;
   const activateEffect = (): void => {
     dispatch(convertToEmittableAction(setSegmentEffect({
-      microId, effect, segmentId,
+      microId, effect, segmentId, segmentIndex,
     })));
   };
   return (

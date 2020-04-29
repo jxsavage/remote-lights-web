@@ -92,7 +92,7 @@ React.FunctionComponent<SegmentTabContentProps> = (
                 {...{ segment }}
               />
               <EffectTabContainer
-                {...{ segment, microId }}
+                {...{ segment, microId, segmentIndex }}
               />
             </Card.Body>
           </Card>
