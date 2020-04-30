@@ -27,7 +27,7 @@ const mergeButtonStyles: React.CSSProperties = {
 const SegmentSplitter: React.FunctionComponent<SegmentSplitterProps> = ({
   segments, totalLEDs,
 }) => {
-  const LEDSegments = useShallowRootSelector(
+  const LEDSegments: LEDSegment[] = useShallowRootSelector(
     (state) => segments.map(
       (segId) => state.remoteLightsEntity.segments.byId[segId],
     ),
@@ -38,21 +38,24 @@ const SegmentSplitter: React.FunctionComponent<SegmentSplitterProps> = ({
         const buttons: JSX.Element[] = [];
         if (segmentIndex !== 0) {
           buttons.push((
-            <MergeButton {
-              ...{ direction: Direction.Left, segmentIndex, segment }
-            }
+            <MergeButton
+              key={`mergeLeft${segment.segmentId}`}
+              {...{ direction: Direction.Left, segmentIndex, segment }}
             />
           ));
         }
         const { microId } = segment;
         buttons.push((
-          <SplitSegmentButtons {...{ microId, segmentIndex }} />
+          <SplitSegmentButtons
+            key={`splitLeft${segment.segmentId}`}
+            {...{ microId, segmentIndex }}
+          />
         ));
         if (segmentIndex !== (LEDSegments.length - 1)) {
           buttons.push((
-            <MergeButton {
-              ...{ direction: Direction.Right, segmentIndex, segment }
-            }
+            <MergeButton
+              key={`mergeRight${segment.segmentId}`}
+              {...{ direction: Direction.Right, segmentIndex, segment }}
             />
           ));
         }

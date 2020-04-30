@@ -4,7 +4,7 @@ import {
   Provider, TypedUseSelectorHook, useSelector, shallowEqual,
 } from 'react-redux';
 import { rootReducer, RootState, emitActionMiddleware } from 'Shared/store';
-import { emitAnyAction } from 'socket';
+import { emitAnyAction, addRootActionListener } from 'socket';
 
 const store = createStore(
   rootReducer,
@@ -15,6 +15,7 @@ export const useRootStateSelector: TypedUseSelectorHook<RootState> = useSelector
 export const useShallowRootSelector: TypedUseSelectorHook<RootState> = (
   selector,
 ) => useRootStateSelector(selector, shallowEqual);
+addRootActionListener(store.dispatch);
 const RootStateProvider: React.FunctionComponent = ({ children }) => (
   <Provider store={store}>
     {children}

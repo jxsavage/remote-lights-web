@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, Switch } from 'react-router';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link, BrowserRouter as Router } from 'react-router-dom';
+import { reInitAppState } from 'socket';
 import MicroControllersPage from './components/MicroControllers/MicroControllersPage';
-import { reInitAppState } from './components/AppState';
 
 const Routes: React.FunctionComponent = () => (
   <Router>
