@@ -7,12 +7,11 @@ import {
   faPlusCircle, faChevronLeft, faChevronRight,
   faExpandAlt, IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import { POSSIBLE_EFFECTS_STRINGS } from 'Shared/MicroCommands';
 import { useDispatch } from 'react-redux';
 import { RootStateDispatch, useShallowRootSelector } from 'components/RootStateProvider';
 import {
   splitSegment, mergeSegments, convertToEmittableAction,
-  MicroState, LEDSegment, MicroEffect, Direction,
+  MicroState, LEDSegment, MicroEffect, Direction, POSSIBLE_EFFECTS_STRINGS,
 } from 'Shared/store';
 import { segmentTabWidth } from './LEDSegments';
 
