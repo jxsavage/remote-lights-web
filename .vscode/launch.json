@@ -5,11 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Web Attach Remote Lights",
       "type": "chrome",
-      "request": "launch",
-      "name": "Chrome Debugger",
+      "request": "attach",
+      "port": 9222,
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/src"
-    }
+  }
   ]
 }

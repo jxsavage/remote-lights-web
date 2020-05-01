@@ -3,12 +3,18 @@ import { createStore, applyMiddleware } from 'redux';
 import {
   Provider, TypedUseSelectorHook, useSelector, shallowEqual,
 } from 'react-redux';
-import { rootReducer, RootState, emitActionMiddleware } from 'Shared/store';
+import {
+  rootReducer, RootState, emitActionMiddleware, logActionMiddleware,
+} from 'Shared/store';
 import { emitAnyAction, addRootActionListener } from 'socket';
 
+const middleware = applyMiddleware(
+  logActionMiddleware(),
+  emitActionMiddleware<RootState>(emitAnyAction),
+);
 const store = createStore(
   rootReducer,
-  applyMiddleware(emitActionMiddleware<RootState>(emitAnyAction)),
+  middleware,
 );
 export type RootStateDispatch = typeof store.dispatch;
 export const useRootStateSelector: TypedUseSelectorHook<RootState> = useSelector;
