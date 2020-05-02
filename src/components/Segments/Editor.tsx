@@ -9,14 +9,14 @@ interface SegmentEditorProps {
 }
 const SegmentEditor: React.FunctionComponent<SegmentEditorProps> = ({ micro }) => {
   const {
-    microId, totalLEDs, segments,
+    microId, totalLEDs, segmentIds,
   } = micro;
   return (
     <Card>
       <Card.Header className="h3">Segment Editor</Card.Header>
       <Card.Body>
         <SegmentActionsButtonGroup {...{
-          microId, totalLEDs, segments,
+          microId, totalLEDs, segmentIds,
         }}
         />
         <SegmentResizer {...{ micro }} />

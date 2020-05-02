@@ -4,6 +4,7 @@ import { MicroState, LEDSegment } from 'Shared/store';
 import { useShallowRootSelector } from 'components/RootStateProvider';
 import segmentTabWidth from 'components/utils';
 import { EffectTabContainer } from 'components/Segments/EffectsTab';
+import SegmentInfoCard from 'components/Segments/InfoCard';
 
 const segmentButtonStyle: React.CSSProperties = {
   width: '100%',
@@ -13,13 +14,13 @@ const segmentButtonStyle: React.CSSProperties = {
 interface LEDSegmentsProps {
   microId: MicroState['microId'];
   totalLEDs: number;
-  segments: MicroState['segments'];
+  segmentIds: MicroState['segmentIds'];
 }
 const LEDSegments: React.FunctionComponent<LEDSegmentsProps> = (
-  { segments, totalLEDs, microId },
+  { segmentIds, totalLEDs, microId },
 ) => {
   const segmentsArray = useShallowRootSelector(
-    (state) => segments.map(
+    (state) => segmentIds.map(
       (segmentId) => state.remoteLightsEntity.segments.byId[segmentId],
     ),
   );
@@ -95,33 +96,5 @@ React.FunctionComponent<SegmentTabContentProps> = (
     })}
   </Tab.Content>
 );
-interface SegmentInfoCardProps {
-  segment: LEDSegment;
-}
-const SegmentInfoCard:
-React.FunctionComponent<SegmentInfoCardProps> = (
-  { segment: { effect, numLEDs, offset } },
-) => (
-  <Card>
-    <Card.Header className="h4">
-      Segment Information
-    </Card.Header>
-    <Card.Body>
-      <ul className="d-flex flex-row justify-content-around mb-0">
-        <li className="h5">
-          <span>Effect: </span>
-          <span>{effect}</span>
-        </li>
-        <li className="h5">
-          <span>LEDs: </span>
-          <span>{numLEDs}</span>
-        </li>
-        <li className="h5">
-          <span>Offset: </span>
-          <span>{offset}</span>
-        </li>
-      </ul>
-    </Card.Body>
-  </Card>
-);
+
 export default LEDSegments;

@@ -16,7 +16,7 @@ const Routes: React.FunctionComponent = () => (
             to="/"
             className="nav-link"
           >
-            Class
+            Microcontrollers
           </Link>
         </Nav.Item>
         <Button

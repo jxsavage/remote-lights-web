@@ -9,15 +9,15 @@ import SplitSegmentButtons from './Split';
 
 
 interface SegmentActionsButtonGroup {
-  segments: MicroState['segments'];
+  segmentIds: MicroState['segmentIds'];
   totalLEDs: MicroState['totalLEDs'];
 }
 
 const SegmentActionsButtonGroup: React.FunctionComponent<SegmentActionsButtonGroup> = ({
-  segments, totalLEDs,
+  segmentIds, totalLEDs,
 }) => {
   const LEDSegments: LEDSegment[] = useShallowRootSelector(
-    (state) => segments.map(
+    (state) => segmentIds.map(
       (segId) => state.remoteLightsEntity.segments.byId[segId],
     ),
   );

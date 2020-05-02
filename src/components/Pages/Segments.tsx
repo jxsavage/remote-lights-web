@@ -3,7 +3,7 @@ import { useShallowRootSelector } from 'components/RootStateProvider';
 // eslint-disable-next-line import/no-cycle
 import { MicroController } from '../MicroControllers';
 
-const MicroControllersPage:
+const SegmentsPage:
 React.FunctionComponent = () => {
   const allMicroIds = useShallowRootSelector((state) => state.remoteLightsEntity.micros.allIds);
   return (
@@ -26,4 +26,4 @@ React.FunctionComponent = () => {
     </div>
   );
 };
-export default MicroControllersPage;
+export default SegmentsPage;

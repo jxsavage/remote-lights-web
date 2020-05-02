@@ -4,7 +4,7 @@ import { useShallowRootSelector } from 'components/RootStateProvider';
 import { MicroState } from 'Shared/store';
 import LEDSegments from './LEDSegments';
 import BrightnessSlider from './BrightnessSlider';
-import SegmentEditor from '../Segments/Editor';
+import { SegmentEditor } from '../Segments';
 
 interface MicroControllerProps {
   microId: MicroState['microId'];
@@ -17,7 +17,7 @@ React.FunctionComponent<MicroControllerProps> = (
     (state) => state.remoteLightsEntity.micros.byId[microId],
   );
   const {
-    brightness, totalLEDs, segments,
+    brightness, totalLEDs, segmentIds,
   } = micro;
   return (
     <Card.Body>
@@ -25,7 +25,7 @@ React.FunctionComponent<MicroControllerProps> = (
       <SegmentEditor {...{ micro }} />
       <hr />
       <LEDSegments {...{
-        totalLEDs, segments, microId,
+        totalLEDs, segmentIds, microId,
       }}
       />
     </Card.Body>
