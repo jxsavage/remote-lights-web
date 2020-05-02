@@ -1,7 +1,11 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable react/static-property-placement */
+/* eslint-disable react/state-in-constructor */
 /* eslint-disable max-classes-per-file */
 import * as React from 'react';
 import { SliderItem } from 'react-compound-slider';
-import './brightness-tooltip.css';
+import './tooltip.css';
 
 const { Component } = React;
 
@@ -230,6 +234,7 @@ interface TickProps {
   format: (val: number) => string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const defaultFormat = (d: number) => 'd';
 
 export function Tick({ tick, count, format = defaultFormat }: TickProps) {

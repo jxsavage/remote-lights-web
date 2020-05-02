@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import {
   Slider, Rail, Handles, Tracks,
@@ -10,7 +11,7 @@ import {
   setMicroBrightness, convertToEmittableAction,
   MicroState,
 } from 'Shared/store';
-import { Handle, Track, TooltipRail } from './BrightnessComponents';
+import { Handle, Track, TooltipRail } from './children';
 
 export interface BrightnessSliderProps {
   microId: MicroState['microId'];

@@ -8,7 +8,7 @@ import {
   resizeSegmentsFromBoundaries, convertToEmittableAction,
   MicroState,
 } from 'Shared/store';
-import { Handle, Track, TooltipRail } from './ResizerComponents';
+import { Handle, Track, TooltipRail } from './children';
 
 interface SegmentResizerProps {
   micro: MicroState;
@@ -81,4 +81,5 @@ function handleDomain(boundaries: number[], totalLEDs: number): number[] {
   }
   return [0, totalLEDs];
 }
+
 export default SegmentResizer;

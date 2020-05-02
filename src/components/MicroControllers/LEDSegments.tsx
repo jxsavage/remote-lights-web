@@ -2,7 +2,8 @@ import { Tab, Nav, Card } from 'react-bootstrap';
 import React from 'react';
 import { MicroState, LEDSegment } from 'Shared/store';
 import { useShallowRootSelector } from 'components/RootStateProvider';
-import { EffectTabContainer } from './EffectsTab';
+import segmentTabWidth from 'components/utils';
+import { EffectTabContainer } from 'components/Segments/EffectsTab';
 
 const segmentButtonStyle: React.CSSProperties = {
   width: '100%',
@@ -34,14 +35,7 @@ const LEDSegments: React.FunctionComponent<LEDSegmentsProps> = (
     </Tab.Container>
   );
 };
-export function segmentTabWidth(
-  totalLEDs: number, segmentLEDs: number, segmentIndex: number, offset: number,
-): React.CSSProperties {
-  return {
-    marginLeft: `${segmentIndex === 0 ? ((offset / totalLEDs) * 100) : 0}%`,
-    width: `${(segmentLEDs / totalLEDs) * 100}%`,
-  };
-}
+
 
 interface SegmentNavProps {
   segments: LEDSegment[];
