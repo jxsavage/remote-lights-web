@@ -1,5 +1,5 @@
 import React from 'react';
-import { LEDSegment } from 'Shared/store';
+import { LEDSegment, MicroEffect } from 'Shared/store';
 import { Card } from 'react-bootstrap';
 
 interface SegmentInfoCardProps {
@@ -17,7 +17,7 @@ React.FunctionComponent<SegmentInfoCardProps> = (
       <ul className="d-flex flex-row justify-content-around mb-0">
         <li className="h5">
           <span>Effect: </span>
-          <span>{effect}</span>
+          <span>{MicroEffect[effect]}</span>
         </li>
         <li className="h5">
           <span>LEDs: </span>

@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link, BrowserRouter as Router } from 'react-router-dom';
 import { reInitAppState } from 'socket';
-import MicroControllersPage from './components/Pages/MicroControllers';
+import { MicrocontrollersPage, SegmentsPage } from 'components/Pages';
 
 const Routes: React.FunctionComponent = () => (
   <Router>
@@ -19,6 +19,14 @@ const Routes: React.FunctionComponent = () => (
             Microcontrollers
           </Link>
         </Nav.Item>
+        <Nav.Item>
+          <Link
+            to="/segments"
+            className="nav-link"
+          >
+            Segments
+          </Link>
+        </Nav.Item>
         <Button
           onClick={reInitAppState}
         >
@@ -29,7 +37,10 @@ const Routes: React.FunctionComponent = () => (
     </Navbar>
     <Switch>
       <Route exact path="/">
-        <MicroControllersPage />
+        <MicrocontrollersPage />
+      </Route>
+      <Route exact path="/segments">
+        <SegmentsPage />
       </Route>
     </Switch>
   </Router>

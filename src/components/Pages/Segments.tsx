@@ -1,24 +1,26 @@
 import React from 'react';
 import { useShallowRootSelector } from 'components/RootStateProvider';
-// eslint-disable-next-line import/no-cycle
-import { MicroController } from '../MicroControllers';
+import { EffectTabContainer, SegmentInfoCard } from 'components/Segments';
 
 const SegmentsPage:
 React.FunctionComponent = () => {
-  const allMicroIds = useShallowRootSelector((state) => state.remoteLightsEntity.micros.allIds);
+  const {
+    byId, allIds,
+  } = useShallowRootSelector((state) => state.remoteLightsEntity.segments);
   return (
     <div className="card">
-      <div className="h1 card-header">MicroControllers</div>
+      <div className="h1 card-header">Segments</div>
       <div className="card-body">
-        {allMicroIds.map((microId) => (
-          <div className="card" key={microId}>
+        {allIds.map((segmentId) => (
+          <div className="card" key={segmentId}>
             <div className="h2 card-header">
-              MicroController:
-              {microId}
+              {`Segment ${segmentId}`}
             </div>
-            <MicroController
-              key={microId}
-              {...{ microId }}
+            <SegmentInfoCard
+              segment={byId[segmentId]}
+            />
+            <EffectTabContainer
+              segment={byId[segmentId]}
             />
           </div>
         ))}

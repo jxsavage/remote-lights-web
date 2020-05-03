@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 import { useDispatch } from 'react-redux';
-import { RootStateDispatch } from 'components/RootStateProvider';
+import { RootStateDispatch, useShallowRootSelector } from 'components/RootStateProvider';
 import {
   setSegmentEffect, convertToEmittableAction,
   POSSIBLE_EFFECTS_STRINGS, LEDSegment, MicroEffect,
@@ -14,12 +14,13 @@ import {
 
 interface EffectTabContainerProps {
   segment: LEDSegment;
-  segmentIndex: number;
 }
 export const EffectTabContainer:
-React.FunctionComponent<EffectTabContainerProps> = ({ segment, segmentIndex }) => {
-  const { effect } = segment;
-
+React.FunctionComponent<EffectTabContainerProps> = ({ segment }) => {
+  const { effect, microId, segmentId } = segment;
+  const segmentIndex = useShallowRootSelector(
+    (state) => state.remoteLightsEntity.micros.byId[microId].segmentIds.indexOf(segmentId),
+  );
   return (
     <Card>
       <Card.Header className="h4">
