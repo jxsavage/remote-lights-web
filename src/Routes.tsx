@@ -3,7 +3,8 @@ import { Route, Switch } from 'react-router';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link, BrowserRouter as Router } from 'react-router-dom';
 import { reInitAppState } from 'socket';
-import { MicrocontrollersPage, SegmentsPage } from 'components/Pages';
+import { MicrocontrollersPage, SegmentsPage } from 'components/pages';
+import SegmentGroupsPage from 'components/pages/SegmentGroups';
 
 const Routes: React.FunctionComponent = () => (
   <Router>
@@ -27,12 +28,22 @@ const Routes: React.FunctionComponent = () => (
             Segments
           </Link>
         </Nav.Item>
-        <Button
-          onClick={reInitAppState}
-        >
-          Reset State
-        </Button>
+        <Nav.Item>
+          <Link
+            to="/groups"
+            className="nav-link"
+          >
+            Groups
+          </Link>
+        </Nav.Item>
+
       </Nav>
+      <Button
+        className="ml-auto"
+        onClick={reInitAppState}
+      >
+        Reset State
+      </Button>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
     </Navbar>
     <Switch>
@@ -41,6 +52,9 @@ const Routes: React.FunctionComponent = () => (
       </Route>
       <Route exact path="/segments">
         <SegmentsPage />
+      </Route>
+      <Route exact path="/groups">
+        <SegmentGroupsPage />
       </Route>
     </Switch>
   </Router>

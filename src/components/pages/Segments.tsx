@@ -1,6 +1,8 @@
 import React from 'react';
 import { useShallowRootSelector } from 'components/RootStateProvider';
-import { EffectTabContainer, SegmentInfoCard } from 'components/Segments';
+import { SegmentInfoCard } from 'components/segments';
+import { EffectTabContainer } from 'components/effects';
+import { setSegmentEffectButtonFactory } from 'components/segments/SetSegmentEffectButton';
 
 const SegmentsPage:
 React.FunctionComponent = () => {
@@ -20,7 +22,9 @@ React.FunctionComponent = () => {
               segment={byId[segmentId]}
             />
             <EffectTabContainer
-              segment={byId[segmentId]}
+              variant="segment"
+              id={segmentId}
+              setEffectElementFactory={setSegmentEffectButtonFactory}
             />
           </div>
         ))}

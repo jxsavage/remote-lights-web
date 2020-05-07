@@ -4,7 +4,7 @@ import { LEDSegment, Direction } from 'Shared/store/types';
 import { RootStateDispatch, convertToEmittableAction, mergeSegments } from 'Shared/store';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import ActionIcons from './ActionIcons';
+import ActionIcons from './SegmentActionIcons';
 
 const mergeButtonStyles: React.CSSProperties = {
   maxWidth: '60px',

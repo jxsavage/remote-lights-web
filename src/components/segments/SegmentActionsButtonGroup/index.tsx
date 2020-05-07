@@ -1,11 +1,10 @@
-import { MicroState, LEDSegment } from 'Shared/store/types';
-import { useShallowRootSelector } from 'components/RootStateProvider';
+import { MicroState, LEDSegment, Direction } from 'Shared/store/types';
 import React from 'react';
-import { Direction } from 'Shared/store';
 import { ButtonGroup } from 'react-bootstrap';
 import segmentTabWidth from 'components/utils';
-import MergeButton from './Merge';
-import SplitSegmentButtons from './Split';
+import { useShallowRootSelector } from 'components/RootStateProvider';
+import MergeButton from './MergeSegmentsButton';
+import SplitSegmentButtons from './SplitSegmentButtons';
 
 
 interface SegmentActionsButtonGroup {
@@ -13,7 +12,8 @@ interface SegmentActionsButtonGroup {
   totalLEDs: MicroState['totalLEDs'];
 }
 
-const SegmentActionsButtonGroup: React.FunctionComponent<SegmentActionsButtonGroup> = ({
+const SegmentActionsButtonGroup:
+React.FunctionComponent<SegmentActionsButtonGroup> = ({
   segmentIds, totalLEDs,
 }) => {
   const LEDSegments: LEDSegment[] = useShallowRootSelector(
@@ -51,6 +51,7 @@ const SegmentActionsButtonGroup: React.FunctionComponent<SegmentActionsButtonGro
         const { numLEDs, offset } = segment;
         return (
           <ButtonGroup
+            key={`actionButtons${segment.segmentId}`}
             className="justify-content-center"
             style={segmentTabWidth(totalLEDs, numLEDs, segmentIndex, offset)}
           >

@@ -2,9 +2,9 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import { useShallowRootSelector } from 'components/RootStateProvider';
 import { MicroState } from 'Shared/store';
+import { SegmentEditor } from 'components/segments';
 import LEDSegments from './LEDSegments';
 import BrightnessSlider from './BrightnessSlider';
-import { SegmentEditor } from '../Segments';
 
 interface MicroControllerProps {
   microId: MicroState['microId'];

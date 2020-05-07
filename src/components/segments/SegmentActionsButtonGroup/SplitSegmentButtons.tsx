@@ -12,7 +12,7 @@ import {
   splitSegment, convertToEmittableAction,
   MicroState, MicroEffect, Direction, POSSIBLE_EFFECTS_STRINGS,
 } from 'Shared/store';
-import ActionIcons from './ActionIcons';
+import ActionIcons from './SegmentActionIcons';
 
 /**
  * Split Segment Buttons

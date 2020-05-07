@@ -3,8 +3,9 @@ import React from 'react';
 import { MicroState, LEDSegment } from 'Shared/store';
 import { useShallowRootSelector } from 'components/RootStateProvider';
 import segmentTabWidth from 'components/utils';
-import { EffectTabContainer } from 'components/Segments/EffectsTab';
-import SegmentInfoCard from 'components/Segments/InfoCard';
+import { EffectTabContainer } from 'components/effects';
+import SegmentInfoCard from 'components/segments/SegmentInfoCard';
+import { setSegmentEffectButtonFactory } from 'components/segments/SetSegmentEffectButton';
 
 const segmentButtonStyle: React.CSSProperties = {
   width: '100%',
@@ -64,12 +65,11 @@ React.FunctionComponent<SegmentNavProps> = (
 );
 
 interface SegmentTabContentProps {
-  microId: MicroState['microId'];
   segments: LEDSegment[];
 }
 export const SegmentTabContent:
 React.FunctionComponent<SegmentTabContentProps> = (
-  { segments, microId },
+  { segments },
 ) => (
   <Tab.Content>
     {segments.map((segment: LEDSegment, segmentIndex: number) => {
@@ -87,7 +87,9 @@ React.FunctionComponent<SegmentTabContentProps> = (
                 {...{ segment }}
               />
               <EffectTabContainer
-                {...{ segment, microId, segmentIndex }}
+                variant="segment"
+                id={segment.segmentId}
+                setEffectElementFactory={setSegmentEffectButtonFactory}
               />
             </Card.Body>
           </Card>

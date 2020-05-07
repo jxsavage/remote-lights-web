@@ -2,25 +2,34 @@ import React from 'react';
 import { Tab, Row, Col } from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-
-import { useDispatch } from 'react-redux';
-import { RootStateDispatch, useShallowRootSelector } from 'components/RootStateProvider';
+import { useShallowRootSelector } from 'components/RootStateProvider';
 import {
-  setSegmentEffect, convertToEmittableAction,
   POSSIBLE_EFFECTS_STRINGS, LEDSegment, MicroEffect,
 } from 'Shared/store';
+import { SegmentGroup } from 'Shared/store/types';
 
+type EffectTabVariants = 'segment' | 'group';
+type VariantsId = SegmentGroup['segmentGroupId'] | LEDSegment['segmentId'];
+interface SetEffectElementFactoryProps {
+  id: VariantsId;
+  newEffect: MicroEffect;
+}
 interface EffectTabContainerProps {
-  segment: LEDSegment;
+  variant: EffectTabVariants;
+  id: VariantsId;
+  setEffectElementFactory: React.FunctionComponentFactory<SetEffectElementFactoryProps>;
 }
 export const EffectTabContainer:
-React.FunctionComponent<EffectTabContainerProps> = ({ segment }) => {
-  const { effect, microId, segmentId } = segment;
-  const segmentIndex = useShallowRootSelector(
-    (state) => state.remoteLightsEntity.micros.byId[microId].segmentIds.indexOf(segmentId),
-  );
+React.FunctionComponent<
+EffectTabContainerProps
+> = ({ variant, id, setEffectElementFactory }) => {
+  const currentEffect = useShallowRootSelector((
+    { remoteLightsEntity: { segments, segmentGroups } },
+  ) => ((variant === 'segment')
+    ? segments.byId[id].effect
+    : segmentGroups.byId[id].groupEffect));
+
   return (
     <Card>
       <Card.Header className="h4">
@@ -29,14 +38,14 @@ React.FunctionComponent<EffectTabContainerProps> = ({ segment }) => {
       <Card.Body>
         <Tab.Container
           id="left-tabs-example"
-          defaultActiveKey={MicroEffect[effect]}
+          defaultActiveKey={MicroEffect[currentEffect || 0]}
         >
           <Row>
             <Col sm={3}>
               <EffectTab />
             </Col>
             <Col sm={9}>
-              <EffectTabContent {...{ segment, segmentIndex }} />
+              <EffectTabContent {...{ setEffectElementFactory, id }} />
             </Col>
           </Row>
         </Tab.Container>
@@ -61,13 +70,15 @@ export function EffectTab(): JSX.Element {
   );
 }
 interface EffectTabContentProps {
-  segment: LEDSegment;
-  segmentIndex: number;
+  id: VariantsId;
+  setEffectElementFactory: React.FunctionComponentFactory<SetEffectElementFactoryProps>;
 }
 export const EffectTabContent:
-React.FunctionComponent<EffectTabContentProps> = ({ segment, segmentIndex }) => (
+React.FunctionComponent<EffectTabContentProps> = (
+  { id, setEffectElementFactory },
+) => (
   <Tab.Content>
-    {POSSIBLE_EFFECTS_STRINGS.map((effectName, effect) => (
+    {POSSIBLE_EFFECTS_STRINGS.map((effectName, newEffect) => (
       <Tab.Pane
         key={effectName}
         eventKey={effectName}
@@ -79,7 +90,7 @@ React.FunctionComponent<EffectTabContentProps> = ({ segment, segmentIndex }) => 
           <Card.Body />
           <Card.Footer>
             <ButtonGroup>
-              <ActivateEffectButton {...{ segment, effect, segmentIndex }} />
+              {setEffectElementFactory({ newEffect, id })}
             </ButtonGroup>
           </Card.Footer>
         </Card>
@@ -87,31 +98,5 @@ React.FunctionComponent<EffectTabContentProps> = ({ segment, segmentIndex }) => 
     ))}
   </Tab.Content>
 );
-interface ActivateEffectButtonProps {
-  effect: MicroEffect;
-  segment: LEDSegment;
-  segmentIndex: number;
-}
-const ActivateEffectButton:
-React.FunctionComponent<ActivateEffectButtonProps> = (
-  { segment, effect, segmentIndex },
-) => {
-  const dispatch = useDispatch<RootStateDispatch>();
-  const currentEffect = segment.effect;
-  const { microId, segmentId } = segment;
-  const activateEffect = (): void => {
-    dispatch(convertToEmittableAction(setSegmentEffect({
-      microId, effect, segmentId, segmentIndex,
-    })));
-  };
-  return (
-    <Button
-      disabled={effect === currentEffect}
-      onClick={activateEffect}
-      variant="info"
-    >
-      Activate
-    </Button>
-  );
-};
+
 export default EffectTabContainer;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import { MicroState } from 'Shared/store';
-import SegmentResizer from './Resizer';
-import SegmentActionsButtonGroup from './ActionsButtonGroup';
+import SegmentResizer from './SegmentResizer';
+import SegmentActionsButtonGroup from './SegmentActionsButtonGroup';
 
 interface SegmentEditorProps {
   micro: MicroState;

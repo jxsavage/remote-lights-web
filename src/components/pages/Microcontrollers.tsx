@@ -1,6 +1,6 @@
 import React from 'react';
 import { useShallowRootSelector } from 'components/RootStateProvider';
-import { MicroController } from 'components/MicroControllers';
+import { MicroController } from 'components/microcontrollers';
 
 const MicrocontrollersPage:
 React.FunctionComponent = () => {
