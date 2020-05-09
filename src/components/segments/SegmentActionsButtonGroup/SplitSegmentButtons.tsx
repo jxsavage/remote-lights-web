@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { RootStateDispatch } from 'components/RootStateProvider';
 import {
   splitSegment, convertToEmittableAction,
-  MicroState, MicroEffect, Direction, POSSIBLE_EFFECTS_STRINGS,
+  MicroState, MicroEffect, Direction, POSSIBLE_EFFECTS_STRINGS, LEDSegment,
 } from 'Shared/store';
 import ActionIcons from './SegmentActionIcons';
 
@@ -18,61 +18,62 @@ import ActionIcons from './SegmentActionIcons';
  * Split Segment Buttons
  */
 interface SplitSegmentButtonsProps {
-  segmentIndex: number;
+  segmentId: LEDSegment['segmentId'];
   microId: MicroState['microId'];
 }
 const splitIcons = [faChevronLeft, faExpandAlt, faChevronRight];
 const SplitSegmentButtons:
 React.FunctionComponent<SplitSegmentButtonsProps> = (
-  { microId, segmentIndex },
+  { microId, segmentId },
 ) => (
-  <React.Fragment key={`splitRightOrLeft${segmentIndex}`}>
+  <React.Fragment key={`splitRightOrLeft${segmentId}`}>
     <DropdownButton
       as={ButtonGroup}
       title={<ActionIcons {...{ direction: Direction.Left, icons: splitIcons }} />}
       id="add-start"
     >
-      <SplitOptions {...{ direction: Direction.Left, segmentIndex, microId }} />
+      <SplitOptions {...{ direction: Direction.Left, segmentId, microId }} />
     </DropdownButton>
     <DropdownButton
       as={ButtonGroup}
       title={<ActionIcons {...{ direction: Direction.Right, icons: splitIcons }} />}
       id="add-end"
     >
-      <SplitOptions {...{ direction: Direction.Right, segmentIndex, microId }} />
+      <SplitOptions {...{ direction: Direction.Right, segmentId, microId }} />
     </DropdownButton>
   </React.Fragment>
 );
 interface SplitOptionsProps {
   microId: MicroState['microId'];
-  segmentIndex: number;
+  segmentId: LEDSegment['segmentId'];
   direction: Direction;
 }
 const SplitOptions:
 React.FunctionComponent<SplitOptionsProps> = ({
-  microId, segmentIndex, direction,
+  microId, segmentId, direction,
 }: SplitOptionsProps) => (
   <>
     {POSSIBLE_EFFECTS_STRINGS.map((effectName, newEffect) => (
       <SplitSegmentDropdownItem {...{
-        direction, effectName, segmentIndex, newEffect, microId, key: effectName,
+        direction, effectName, newEffect, microId, key: effectName, segmentId,
       }}
       />
     ))}
   </>
 );
 interface SplitSegmentDropdownItemProps {
-  direction: Direction; segmentIndex: number; newEffect: MicroEffect;
+  direction: Direction; newEffect: MicroEffect;
   microId: MicroState['microId']; effectName: string | MicroEffect;
+  segmentId: LEDSegment['segmentId'];
 }
 const SplitSegmentDropdownItem:
 React.FunctionComponent<SplitSegmentDropdownItemProps> = ({
-  direction, microId, newEffect, segmentIndex, effectName,
+  direction, microId, segmentId, newEffect, effectName,
 }) => {
   const dispatch: RootStateDispatch = useDispatch();
   const splitOnClick = (): void => {
     dispatch(convertToEmittableAction(splitSegment({
-      direction, segmentIndex, newEffect, microId,
+      direction, newEffect, microId, segmentId,
     })));
   };
   return (

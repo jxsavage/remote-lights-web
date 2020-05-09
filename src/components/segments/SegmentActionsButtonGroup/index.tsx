@@ -33,11 +33,11 @@ React.FunctionComponent<SegmentActionsButtonGroup> = ({
             />
           ));
         }
-        const { microId } = segment;
+        const { microId, segmentId } = segment;
         buttons.push((
           <SplitSegmentButtons
             key={`splitLeft${segment.segmentId}`}
-            {...{ microId, segmentIndex }}
+            {...{ microId, segmentIndex, segmentId }}
           />
         ));
         if (segmentIndex !== (LEDSegments.length - 1)) {

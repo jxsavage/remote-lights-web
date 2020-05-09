@@ -14,15 +14,15 @@ const mergeButtonStyles: React.CSSProperties = {
  */
 const mergeIcons = [faChevronLeft, faPlusCircle, faChevronRight];
 interface MergeButtonProps {
-  direction: Direction; segmentIndex: number; segment: LEDSegment;
+  direction: Direction; segment: LEDSegment;
 }
 const MergeButton: React.FunctionComponent<MergeButtonProps> = (
-  { direction, segmentIndex, segment: { microId, segmentId } },
+  { direction, segment: { microId, segmentId } },
 ) => {
   const dispatch: RootStateDispatch = useDispatch();
   const mergeOnClick = (): void => {
     dispatch(convertToEmittableAction(mergeSegments({
-      direction, microId, segmentId, segmentIndex,
+      direction, microId, segmentId,
     })));
   };
   return (

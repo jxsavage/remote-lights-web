@@ -31,7 +31,7 @@ React.FunctionComponent<SetSegmentEffectButtonProps> = (
   const { microId } = segment;
   const setEffect = (): void => {
     dispatch(convertToEmittableAction(setSegmentEffect({
-      microId, newEffect, segmentId, segmentIndex,
+      microId, newEffect, segmentId,
     })));
   };
   return (
