@@ -3,9 +3,26 @@ import { Route, Switch } from 'react-router';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link, BrowserRouter as Router } from 'react-router-dom';
 import { reInitAppState } from 'socket';
-import { MicrocontrollersPage, SegmentsPage } from 'components/pages';
-import SegmentGroupsPage from 'components/pages/SegmentGroups';
+import { MicrocontrollersPage, SegmentsPage, SegmentsGroupPage } from 'components/pages';
+import { useDispatch } from 'react-redux';
+import { RootStateDispatch } from 'components/RootStateProvider';
+import { resetAllMicrosState } from 'Shared/store';
 
+const ReInitAppStateButton: React.FC = () => {
+  const dispatch = useDispatch<RootStateDispatch>();
+  const reInit = (): void => {
+    reInitAppState();
+    dispatch(resetAllMicrosState());
+  };
+  return (
+    <Button
+      className="ml-auto"
+      onClick={reInit}
+    >
+      Reset State
+    </Button>
+  );
+};
 const Routes: React.FunctionComponent = () => (
   <Router>
     <Navbar>
@@ -38,12 +55,7 @@ const Routes: React.FunctionComponent = () => (
         </Nav.Item>
 
       </Nav>
-      <Button
-        className="ml-auto"
-        onClick={reInitAppState}
-      >
-        Reset State
-      </Button>
+      <ReInitAppStateButton />
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
     </Navbar>
     <Switch>
@@ -54,7 +66,7 @@ const Routes: React.FunctionComponent = () => (
         <SegmentsPage />
       </Route>
       <Route exact path="/groups">
-        <SegmentGroupsPage />
+        <SegmentsGroupPage />
       </Route>
     </Switch>
   </Router>
