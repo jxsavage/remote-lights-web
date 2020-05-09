@@ -6,10 +6,9 @@ import {
 import { Card } from 'react-bootstrap';
 
 import { useDispatch } from 'react-redux';
-import { RootStateDispatch } from 'components/RootStateProvider';
+import { RootStateDispatch, andEmitAction } from 'components/RootStateProvider';
 import {
-  setMicroBrightness, convertToEmittableAction,
-  MicroState,
+  setMicroBrightness, MicroState,
 } from 'Shared/store';
 import { Handle, Track, TooltipRail } from './children';
 
@@ -37,9 +36,9 @@ function BrightnessSlider(
   const updateBrightness = (slider: readonly number[]): void => {
     // eslint-disable-next-line no-shadow
     const [brightness] = slider;
-    dispatch(convertToEmittableAction(setMicroBrightness({
+    dispatch(andEmitAction(setMicroBrightness({
       microId, brightness,
-    })));
+    }), microId.toString()));
   };
   return (
     <Card>

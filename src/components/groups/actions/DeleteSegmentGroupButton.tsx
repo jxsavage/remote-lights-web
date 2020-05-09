@@ -1,9 +1,12 @@
 import React from 'react';
 import { SegmentGroup } from 'Shared/store/types';
 import { useDispatch } from 'react-redux';
-import { RootStateDispatch, convertToEmittableAction, deleteGroup } from 'Shared/store';
+import { deleteGroup } from 'Shared/store';
 import { Button } from 'react-bootstrap';
+import { RootStateDispatch, andEmitAction } from 'components/RootStateProvider';
+import { SocketDestination } from 'Shared/socket';
 
+const { SERVER } = SocketDestination;
 /**
  * Delete Segment Group
  */
@@ -17,8 +20,9 @@ React.FunctionComponent<DeleteSegmentGroupButtonProps> = (
   const dispatch = useDispatch<RootStateDispatch>();
   function deleteOnClick(): void {
     dispatch(
-      convertToEmittableAction(
+      andEmitAction(
         deleteGroup({ groupId }),
+        SERVER,
       ),
     );
   }

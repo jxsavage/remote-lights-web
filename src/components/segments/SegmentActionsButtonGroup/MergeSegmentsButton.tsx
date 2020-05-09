@@ -1,9 +1,10 @@
 import React from 'react';
 import { faChevronLeft, faPlusCircle, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { LEDSegment, Direction } from 'Shared/store/types';
-import { RootStateDispatch, convertToEmittableAction, mergeSegments } from 'Shared/store';
+import { mergeSegments } from 'Shared/store';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';
+import { RootStateDispatch, andEmitAction } from 'components/RootStateProvider';
 import ActionIcons from './SegmentActionIcons';
 
 const mergeButtonStyles: React.CSSProperties = {
@@ -21,9 +22,9 @@ const MergeButton: React.FunctionComponent<MergeButtonProps> = (
 ) => {
   const dispatch: RootStateDispatch = useDispatch();
   const mergeOnClick = (): void => {
-    dispatch(convertToEmittableAction(mergeSegments({
+    dispatch(andEmitAction(mergeSegments({
       direction, microId, segmentId,
-    })));
+    }), microId.toString()));
   };
   return (
     <Button

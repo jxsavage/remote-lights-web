@@ -1,8 +1,9 @@
 import { LEDSegment, SegmentGroup } from 'Shared/store/types';
 import { useDispatch } from 'react-redux';
 import {
-  RootStateDispatch, convertToEmittableAction, addSegmentToGroup,
+  addSegmentToGroup,
 } from 'Shared/store';
+import { RootStateDispatch, andEmitAction, useShallowRootSelector } from 'components/RootStateProvider';
 import Button from 'react-bootstrap/Button';
 import React from 'react';
 
@@ -18,10 +19,12 @@ React.FunctionComponent<AddSegmentToGroupButtonProps> = (
   { segmentId, groupId },
 ) => {
   const dispatch = useDispatch<RootStateDispatch>();
+  const microId = useShallowRootSelector((state) => (
+    state.remoteLightsEntity.segments.byId[segmentId].microId));
   function addSegment(): void {
     dispatch(
-      convertToEmittableAction(
-        addSegmentToGroup({ segmentId, groupId }),
+      andEmitAction(
+        addSegmentToGroup({ segmentId, groupId }), microId.toString(),
       ),
     );
   }

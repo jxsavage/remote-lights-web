@@ -48,7 +48,7 @@ React.FunctionComponent<SegmentNavProps> = (
   { segments, totalLEDs },
 ) => (
   <Nav style={segmentButtonStyle} variant="tabs">
-    {segments.map(({ numLEDs, offset, segmentId }, segmentIndex) => (
+    {segments.map(({ numLEDs, offset, segmentId }, segmentIndex: number) => (
       <Nav.Item
         key={segmentId}
         style={segmentTabWidth(totalLEDs, numLEDs, segmentIndex, offset)}

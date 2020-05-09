@@ -1,11 +1,11 @@
 import React, { createFactory } from 'react';
 import {
-  MicroEffect, RootStateDispatch, convertToEmittableAction, setSegmentEffect,
+  MicroEffect, setSegmentEffect,
 } from 'Shared/store';
 import { LEDSegment } from 'Shared/store/types';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import { useShallowRootSelector } from 'components/RootStateProvider';
+import { useShallowRootSelector, andEmitAction, RootStateDispatch } from 'components/RootStateProvider';
 
 interface SetSegmentEffectButtonProps {
   id: LEDSegment['segmentId'];
@@ -17,22 +17,15 @@ React.FunctionComponent<SetSegmentEffectButtonProps> = (
 ) => {
   const segmentId = id;
   const dispatch = useDispatch<RootStateDispatch>();
-  const [segment, segmentIndex] = useShallowRootSelector((
-    { remoteLightsEntity: { micros, segments } },
-  ) => {
-    const seg = segments.byId[segmentId];
-    const segIndex = micros.byId[seg.microId].segmentIds.indexOf(seg.segmentId);
-    return [
-      seg,
-      segIndex,
-    ];
-  });
+  const segment = useShallowRootSelector((
+    state,
+  ) => state.remoteLightsEntity.segments.byId[segmentId]);
   const currentEffect = segment.effect;
   const { microId } = segment;
   const setEffect = (): void => {
-    dispatch(convertToEmittableAction(setSegmentEffect({
+    dispatch(andEmitAction(setSegmentEffect({
       microId, newEffect, segmentId,
-    })));
+    }), microId.toString()));
   };
   return (
     <Button

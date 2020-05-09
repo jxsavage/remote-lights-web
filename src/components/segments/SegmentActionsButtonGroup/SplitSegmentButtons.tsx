@@ -7,10 +7,10 @@ import {
   faExpandAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
-import { RootStateDispatch } from 'components/RootStateProvider';
+import { RootStateDispatch, andEmitAction } from 'components/RootStateProvider';
 import {
-  splitSegment, convertToEmittableAction,
-  MicroState, MicroEffect, Direction, POSSIBLE_EFFECTS_STRINGS, LEDSegment,
+  splitSegment, MicroState, MicroEffect, Direction,
+  POSSIBLE_EFFECTS_STRINGS, LEDSegment,
 } from 'Shared/store';
 import ActionIcons from './SegmentActionIcons';
 
@@ -72,9 +72,9 @@ React.FunctionComponent<SplitSegmentDropdownItemProps> = ({
 }) => {
   const dispatch: RootStateDispatch = useDispatch();
   const splitOnClick = (): void => {
-    dispatch(convertToEmittableAction(splitSegment({
+    dispatch(andEmitAction(splitSegment({
       direction, newEffect, microId, segmentId,
-    })));
+    }), microId.toString()));
   };
   return (
     <Dropdown.Item

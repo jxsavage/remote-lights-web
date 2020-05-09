@@ -1,8 +1,12 @@
 import { LEDSegment, SegmentGroup } from 'Shared/store/types';
 import { useDispatch } from 'react-redux';
-import { RootStateDispatch, convertToEmittableAction, removeSegmentFromGroup } from 'Shared/store';
+import { removeSegmentFromGroup } from 'Shared/store';
 import Button from 'react-bootstrap/Button';
 import React from 'react';
+import { RootStateDispatch, andEmitAction } from 'components/RootStateProvider';
+import { SocketDestination } from 'Shared/socket';
+
+const { SERVER } = SocketDestination;
 
 /**
  * Remove Segment from Group
@@ -18,8 +22,9 @@ React.FunctionComponent<RemoveSegmentFromGroupButtonProps> = (
   const dispatch = useDispatch<RootStateDispatch>();
   function removeSegment(): void {
     dispatch(
-      convertToEmittableAction(
+      andEmitAction(
         removeSegmentFromGroup({ segmentId, groupId }),
+        SERVER,
       ),
     );
   }

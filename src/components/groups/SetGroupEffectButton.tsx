@@ -1,12 +1,14 @@
 import React, { createFactory } from 'react';
 import {
-  MicroEffect, RootStateDispatch, convertToEmittableAction, setGroupEffect,
+  MicroEffect, setGroupEffect,
 } from 'Shared/store';
 import { SegmentGroup } from 'Shared/store/types';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import { useShallowRootSelector } from 'components/RootStateProvider';
+import { useShallowRootSelector, andEmitAction, RootStateDispatch } from 'components/RootStateProvider';
+import { SocketDestination } from 'Shared/socket';
 
+const { SERVER } = SocketDestination;
 interface SetGroupEffectButtonProps {
   id: SegmentGroup['segmentGroupId'];
   newEffect: MicroEffect;
@@ -22,9 +24,9 @@ React.FunctionComponent<SetGroupEffectButtonProps> = (
   ) => segmentGroups.byId[groupId]);
   const currentEffect = group.groupEffect;
   const setEffect = (): void => {
-    dispatch(convertToEmittableAction(setGroupEffect({
+    dispatch(andEmitAction(setGroupEffect({
       newEffect, groupId,
-    })));
+    }), SERVER));
   };
   return (
     <Button

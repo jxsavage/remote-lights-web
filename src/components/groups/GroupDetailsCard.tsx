@@ -1,8 +1,8 @@
 import React from 'react';
-import { useShallowRootSelector } from 'components/RootStateProvider';
+import { useShallowRootSelector, andEmitAction, RootStateDispatch } from 'components/RootStateProvider';
 import { useDispatch } from 'react-redux';
 import {
-  RootStateDispatch, convertToEmittableAction, changeGroupControlsEffect, MicroEffect,
+  changeGroupControlsEffect, MicroEffect,
 } from 'Shared/store';
 import { Card, Form } from 'react-bootstrap';
 import { EffectTabContainer } from 'components/effects';
@@ -11,7 +11,9 @@ import {
   RemoveSegmentFromGroupButton, AddSegmentToGroupButton, DeleteSegmentGroupButton,
 } from './actions';
 import { setGroupEffectButtonFactory } from './SetGroupEffectButton';
+import { SocketDestination } from 'Shared/socket';
 
+const { SERVER } = SocketDestination;
 interface GroupDetailsCardProps {
   groupId: SegmentGroup['segmentGroupId'];
 }
@@ -36,10 +38,11 @@ React.FunctionComponent<GroupDetailsCardProps> = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void {
     dispatch(
-      convertToEmittableAction(
+      andEmitAction(
         changeGroupControlsEffect(
           { controlsEffect: event.target.checked, groupId },
         ),
+        SERVER,
       ),
     );
   }

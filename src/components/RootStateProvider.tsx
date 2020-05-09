@@ -7,10 +7,15 @@ import {
   rootReducer, RootState, emitActionMiddleware, logActionMiddleware,
 } from 'Shared/store';
 import { emitAnyAction, addRootActionListener } from 'socket';
+import { SocketSource } from 'Shared/socket';
+
+const [
+  andEmitAction, emitterMiddleware,
+] = emitActionMiddleware<RootState>(emitAnyAction, SocketSource.WEB_CLIENT);
 
 const middleware = applyMiddleware(
   logActionMiddleware(),
-  emitActionMiddleware<RootState>(emitAnyAction),
+  emitterMiddleware,
 );
 const store = createStore(
   rootReducer,
@@ -27,4 +32,5 @@ const RootStateProvider: React.FunctionComponent = ({ children }) => (
     {children}
   </Provider>
 );
+export { andEmitAction };
 export default RootStateProvider;

@@ -3,10 +3,9 @@ import {
   Rail, Handles, Tracks, Slider,
 } from 'react-compound-slider';
 import { useDispatch } from 'react-redux';
-import { RootStateDispatch } from 'components/RootStateProvider';
+import { RootStateDispatch, andEmitAction } from 'components/RootStateProvider';
 import {
-  resizeSegmentsFromBoundaries, convertToEmittableAction,
-  MicroState,
+  resizeSegmentsFromBoundaries, MicroState,
 } from 'Shared/store';
 import { Handle, Track, TooltipRail } from './children';
 
@@ -24,9 +23,9 @@ React.FunctionComponent<SegmentResizerProps> = ({ micro }) => {
   const { microId, totalLEDs, segmentBoundaries } = micro;
   const resizeOnClick = (boundaries: readonly number[]): void => {
     const bounds = boundaries.slice();
-    dispatch(convertToEmittableAction(resizeSegmentsFromBoundaries({
+    dispatch(andEmitAction(resizeSegmentsFromBoundaries({
       microId, segmentBoundaries: bounds,
-    })));
+    }), microId.toString()));
   };
   return (
     <div style={{
