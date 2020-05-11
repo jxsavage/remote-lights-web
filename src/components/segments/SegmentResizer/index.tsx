@@ -17,10 +17,14 @@ const sliderStyle: React.CSSProperties = {
   width: '100%',
   margin: '3rem auto',
 };
+
 const SegmentResizer:
 React.FunctionComponent<SegmentResizerProps> = ({ micro }) => {
   const dispatch = useDispatch<RootStateDispatch>();
-  const { microId, totalLEDs, segmentBoundaries } = micro;
+  const {
+    microId, totalLEDs, segmentBoundaries,
+  } = micro;
+
   const resizeOnClick = (boundaries: readonly number[]): void => {
     const bounds = boundaries.slice();
     dispatch(andEmitAction(resizeSegmentsFromBoundaries({
@@ -33,9 +37,9 @@ React.FunctionComponent<SegmentResizerProps> = ({ micro }) => {
     }}
     >
       <Slider
-        mode={1}
+        mode={2}
         step={1}
-        domain={[0, totalLEDs]}
+        domain={[1, totalLEDs]}
         rootStyle={sliderStyle}
         onUpdate={resizeOnClick}
       // onChange={this.onChange}
@@ -50,7 +54,7 @@ React.FunctionComponent<SegmentResizerProps> = ({ micro }) => {
                 <Handle
                   key={handle.id}
                   handle={handle}
-                  domain={[0, totalLEDs]}
+                  domain={[1, totalLEDs]}
                   disabled={handle.value === totalLEDs}
                   isActive={handle.id === activeHandleID}
                   getHandleProps={getHandleProps}
@@ -74,11 +78,29 @@ React.FunctionComponent<SegmentResizerProps> = ({ micro }) => {
   );
 };
 
-function handleDomain(boundaries: number[], totalLEDs: number): number[] {
-  if (boundaries.length === 1) {
-    return [totalLEDs, totalLEDs];
-  }
-  return [0, totalLEDs];
-}
-
 export default SegmentResizer;
+
+// function handleDomain(
+//   segmentIds: MicroState['segmentIds'], boundaries: number[],
+//   boundaryIndex: number, totalLEDs: number,
+// ): number[] {
+//   if (segmentIds.length === 1) {
+//     return [totalLEDs, totalLEDs];
+//   }
+//   if (segmentIds.length === 2) {
+//     return [5, totalLEDs - 5];
+//   }
+//   const start = boundaryIndex === 0;
+//   const end = boundaryIndex === boundaries.length;
+//   const middle = !start && !end;
+//   if (start) {
+//     return [5, boundaries[boundaryIndex + 1] - 5];
+//   }
+//   if (middle) {
+//     return [boundaries[boundaryIndex - 1] + 5, boundaries[boundaryIndex + 1] - 5];
+//   }
+//   if (end) {
+//     return [boundaries[boundaryIndex - 1] + 5, totalLEDs - 5];
+//   }
+//   return [0, totalLEDs];
+// }
