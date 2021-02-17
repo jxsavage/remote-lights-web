@@ -3,7 +3,16 @@ import { WebEmitEvent, SharedEmitEvent } from 'Shared/socket';
 import { AnyAction, Dispatch } from 'redux';
 import { AllActions } from 'Shared/store';
 
-const socket = io.connect('http://192.168.0.104:3001/server');
+interface ClientEnv {
+  REACT_APP_SOCKET_IP: string;
+  REACT_APP_SOCKET_PORT: string;
+}
+const {
+  REACT_APP_SOCKET_IP,
+  REACT_APP_SOCKET_PORT
+} = process.env as unknown as ClientEnv;
+
+const socket = io.connect(`http://${REACT_APP_SOCKET_IP}:${REACT_APP_SOCKET_PORT}/server`);
 
 const { ROOT_ACTION, RE_INIT_APP_STATE } = SharedEmitEvent;
 export const emitAnyAction = (action: AnyAction): void => {
