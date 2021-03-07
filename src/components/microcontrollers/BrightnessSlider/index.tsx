@@ -84,5 +84,4 @@ function BrightnessSlider(
   );
 }
 
-
 export default BrightnessSlider;

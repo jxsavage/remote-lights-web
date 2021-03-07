@@ -9,7 +9,7 @@ interface ClientEnv {
 }
 const {
   REACT_APP_SOCKET_IP,
-  REACT_APP_SOCKET_PORT
+  REACT_APP_SOCKET_PORT,
 } = process.env as unknown as ClientEnv;
 
 const socket = io.connect(`http://${REACT_APP_SOCKET_IP}:${REACT_APP_SOCKET_PORT}/server`);

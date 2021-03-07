@@ -38,7 +38,6 @@ const LEDSegments: React.FunctionComponent<LEDSegmentsProps> = (
   );
 };
 
-
 interface SegmentNavProps {
   segments: LEDSegment[];
   totalLEDs: MicroState['totalLEDs'];

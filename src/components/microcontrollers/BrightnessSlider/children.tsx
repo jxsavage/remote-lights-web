@@ -198,6 +198,7 @@ export class Handle extends Component<HandleProps> {
 interface TrackProps {
   source: SliderItem;
   target: SliderItem;
+  // eslint-disable-next-line react/require-default-props
   disabled?: boolean;
   getTrackProps: () => object;
 }

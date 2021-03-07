@@ -3,7 +3,6 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Direction } from 'Shared/store';
 
-
 interface SegmentIconProps {
   direction: Direction;
   icons: IconDefinition[];

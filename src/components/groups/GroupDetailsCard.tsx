@@ -7,11 +7,11 @@ import {
 import { Card, Form } from 'react-bootstrap';
 import { EffectTabContainer } from 'components/effects';
 import { SegmentGroup } from 'Shared/store/types';
+import { SocketDestination } from 'Shared/socket';
 import {
   RemoveSegmentFromGroupButton, AddSegmentToGroupButton, DeleteSegmentGroupButton,
 } from './actions';
 import { setGroupEffectButtonFactory } from './SetGroupEffectButton';
-import { SocketDestination } from 'Shared/socket';
 
 const { SERVER } = SocketDestination;
 interface GroupDetailsCardProps {

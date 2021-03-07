@@ -6,7 +6,6 @@ import { useShallowRootSelector } from 'components/RootStateProvider';
 import MergeButton from './MergeSegmentsButton';
 import SplitSegmentButtons from './SplitSegmentButtons';
 
-
 interface SegmentActionsButtonGroup {
   segmentIds: MicroState['segmentIds'];
   totalLEDs: MicroState['totalLEDs'];
