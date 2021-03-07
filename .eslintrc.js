@@ -3,14 +3,12 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   settings: {
   "import/resolver": {
-    // use <root>/tsconfig.json
-    "typescript": {
-      "alwaysTryTypes": true // always try to resolve types under `<roo/>@types` directory even it doesn't contain any source code, like `@types/unist`
-    },
 
     // use <root>/path/to/folder/tsconfig.json
     "typescript": {
-      "directory": "./tsconfig.json"
+      "directory": "./tsconfig.json",
+      "alwaysTryTypes": true // always try to resolve types under `<roo/>@types` directory even it doesn't contain any source code, like `@types/unist`
+
     },
   },
 },
@@ -32,7 +30,9 @@ module.exports = {
       1, 
       {"explicitSpread": "ignore"}
     ],
-    "react/prop-types": [0, {}]
+    "react/prop-types": [0, {}],
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/ban-types": "off"
   }
   
 };
