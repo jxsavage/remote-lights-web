@@ -1,9 +1,17 @@
-FROM node:lts-alpine
+FROM node:14.16.0-alpine as development
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY ["package-lock.json", "package.json", "tsconfig.json", "./"]
+COPY ["package-lock.json", "package.json", "tsconfig.json", ".prettierrc.js", ".eslintrc.js", "server.js", "./"]
 
 RUN npm install
 
-CMD npm run start
+ENTRYPOINT [ "npm", "run" ]
+
+FROM development as production
+
+COPY public public/
+
+COPY src src/
+
+RUN npm run build
