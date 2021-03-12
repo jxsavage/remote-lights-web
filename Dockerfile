@@ -2,7 +2,7 @@ FROM node:14.16.0-alpine as development
 
 WORKDIR /app
 
-COPY ["package-lock.json", "package.json", "tsconfig.json", ".prettierrc.js", ".eslintrc.js", "server.js", "./"]
+COPY ["package-lock.json", "package.json", "tsconfig.json", ".prettierrc.js", ".eslintrc.js", "server.js", ".env", "./"]
 
 RUN npm install
 
