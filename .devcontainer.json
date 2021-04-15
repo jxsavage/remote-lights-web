@@ -1,0 +1,8 @@
+{
+  "image": "192.168.0.2:5001/remote-lights_web:development",
+  "extensions": [
+	"dbaeumer.vscode-eslint",
+	"mikestead.dotenv"
+  ],
+  "forwardPorts": [3000],
+}

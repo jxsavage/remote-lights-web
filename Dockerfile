@@ -2,16 +2,19 @@ FROM node:14.16.0-alpine as development
 
 WORKDIR /app
 
-COPY ["package-lock.json", "package.json", "tsconfig.json", ".prettierrc.js", ".eslintrc.js", "server.js", ".env", "./"]
+# COPY ["package-lock.json", "package.json", "tsconfig.json", ".prettierrc.js", ".eslintrc.js", "server.js", ".env", "./"]
 
-RUN npm install
+# RUN npm install
 
-ENTRYPOINT [ "npm", "run" ]
 
 FROM development as production
 
-COPY public public/
+COPY . .
 
-COPY src src/
+RUN npm install
 
 RUN npm run build
+
+ENTRYPOINT [ "npm", "run" ]
+
+CMD "server-prod"
