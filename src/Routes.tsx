@@ -25,8 +25,7 @@ const ReInitAppStateButton: React.FC = () => {
 };
 const Routes: React.FunctionComponent = () => (
   <Router>
-    <Navbar>
-
+    <Navbar variant="dark">
       <Link className="navbar-brand" to="/">Remote Lights</Link>
       <Nav>
         <Nav.Item>
