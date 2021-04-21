@@ -4,8 +4,11 @@ import {
   Provider, TypedUseSelectorHook, useSelector, shallowEqual,
 } from 'react-redux';
 import {
-  rootReducer, RootState, emitActionMiddleware, logActionMiddleware,
-} from 'Shared/store';
+  rootReducer, RootState,
+} from 'store';
+import {
+  emitActionMiddleware, logActionMiddleware,
+} from 'store/middleware';
 import { emitAnyAction, addRootActionListener } from 'socket';
 import { SocketSource } from 'Shared/socket';
 
