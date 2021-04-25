@@ -1,5 +1,5 @@
 import React from 'react';
-import { SegmentGroup } from 'Shared/store/types';
+import { SegmentGroup } from 'Shared/types';
 import { useDispatch } from 'react-redux';
 import { deleteGroup } from 'Shared/store';
 import { Button } from 'react-bootstrap';

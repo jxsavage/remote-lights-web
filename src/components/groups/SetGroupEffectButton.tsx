@@ -1,8 +1,6 @@
-import React, { createFactory } from 'react';
-import {
-  MicroEffect, setGroupEffect,
-} from 'Shared/store';
-import { SegmentGroup } from 'Shared/store/types';
+import React, { createFactory, createElement } from 'react';
+import { setGroupEffect } from 'Shared/store';
+import { SegmentGroup, MicroEffect } from 'Shared/types';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { useShallowRootSelector, andEmitAction, RootStateDispatch } from 'components/RootStateProvider';

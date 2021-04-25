@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -9,9 +10,10 @@ import {
 import { useDispatch } from 'react-redux';
 import { RootStateDispatch, andEmitAction } from 'components/RootStateProvider';
 import {
-  splitSegment, MicroState, MicroEffect, Direction,
+  MicroState, MicroEffect, Direction,
   POSSIBLE_EFFECTS_STRINGS, LEDSegment,
-} from 'Shared/store';
+} from 'Shared/types';
+import { splitSegment } from 'Shared/store';
 import ActionIcons from './SegmentActionIcons';
 
 /**

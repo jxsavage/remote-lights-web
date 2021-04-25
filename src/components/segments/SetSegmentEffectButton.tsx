@@ -1,10 +1,8 @@
-import React, { createFactory } from 'react';
-import {
-  MicroEffect, setSegmentEffect,
-} from 'Shared/store';
-import { LEDSegment } from 'Shared/store/types';
+import React, { createFactory, createElement } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';
+import { setSegmentEffect } from 'Shared/store';
+import { LEDSegment, MicroEffect } from 'Shared/types';
 import { useShallowRootSelector, andEmitAction, RootStateDispatch } from 'components/RootStateProvider';
 
 interface SetSegmentEffectButtonProps {

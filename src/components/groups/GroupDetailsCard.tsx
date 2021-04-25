@@ -1,12 +1,10 @@
 import React from 'react';
 import { useShallowRootSelector, andEmitAction, RootStateDispatch } from 'components/RootStateProvider';
 import { useDispatch } from 'react-redux';
-import {
-  changeGroupControlsEffect, MicroEffect,
-} from 'Shared/store';
+import { changeGroupControlsEffect } from 'Shared/store';
 import { Card, Form } from 'react-bootstrap';
 import { EffectTabContainer } from 'components/effects';
-import { SegmentGroup } from 'Shared/store/types';
+import { SegmentGroup, MicroEffect } from 'Shared/types';
 import { SocketDestination } from 'Shared/socket';
 import {
   RemoveSegmentFromGroupButton, AddSegmentToGroupButton, DeleteSegmentGroupButton,

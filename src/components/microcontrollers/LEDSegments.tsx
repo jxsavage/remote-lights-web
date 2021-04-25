@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { Tab, Nav, Card } from 'react-bootstrap';
 import React from 'react';
-import { MicroState, LEDSegment } from 'Shared/store';
+import { MicroState, LEDSegment } from 'Shared/types';
 import { useShallowRootSelector } from 'components/RootStateProvider';
 import segmentTabWidth from 'components/utils';
 import { EffectTabContainer } from 'components/effects';

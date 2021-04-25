@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
-import { WebEmitEvent, SharedEmitEvent } from 'Shared/socket';
 import { AnyAction, Dispatch } from 'redux';
+import { WebEmitEvent, SharedEmitEvent } from 'Shared/socket';
+import { MicroActionType, MicroId } from 'Shared/types';
 import { AllActions } from 'Shared/store';
 
 interface ClientEnv {
@@ -12,7 +13,7 @@ const {
   REACT_APP_SOCKET_PORT,
 } = process.env as unknown as ClientEnv;
 
-const socket = io.connect(`http://${REACT_APP_SOCKET_IP}:${REACT_APP_SOCKET_PORT}/server`);
+export const socket = io.connect(`http://${REACT_APP_SOCKET_IP}:${REACT_APP_SOCKET_PORT}/server`);
 
 const { ROOT_ACTION, RE_INIT_APP_STATE } = SharedEmitEvent;
 export const emitAnyAction = (action: AnyAction): void => {
@@ -27,6 +28,12 @@ export function reInitAppState(): void {
 const { INIT_WEB_CLIENT } = WebEmitEvent;
 export function initWebClient(): void {
   socket.emit(INIT_WEB_CLIENT);
+}
+export function writeEEPROM(microId: MicroId): void {
+  socket.emit(MicroActionType.WRITE_EEPROM, microId);
+}
+export function resetMicro(microId: MicroId): void {
+  socket.emit(MicroActionType.RESET_MICRO_STATE, microId);
 }
 
 export default socket;

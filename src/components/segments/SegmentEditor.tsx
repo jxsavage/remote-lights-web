@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import { MicroState } from 'Shared/store';
+import { MicroState } from 'Shared/types';
 import SegmentResizer from './SegmentResizer';
 import SegmentActionsButtonGroup from './SegmentActionsButtonGroup';
 
@@ -12,7 +12,7 @@ const SegmentEditor: React.FunctionComponent<SegmentEditorProps> = ({ micro }) =
     microId, totalLEDs, segmentIds,
   } = micro;
   return (
-    <Card>
+    <Card className="mb-3 border border-light rounded overflow-hidden">
       <Card.Header className="h3">Segment Editor</Card.Header>
       <Card.Body>
         <SegmentActionsButtonGroup {...{

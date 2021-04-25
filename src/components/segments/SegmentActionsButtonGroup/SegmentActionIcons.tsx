@@ -1,7 +1,7 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import React from 'react';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Direction } from 'Shared/store';
+import { Direction } from 'Shared/types';
 
 interface SegmentIconProps {
   direction: Direction;

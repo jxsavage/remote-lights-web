@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable react/static-property-placement */

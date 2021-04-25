@@ -7,18 +7,19 @@ import {
   rootReducer, RootState,
 } from 'store';
 import {
-  emitActionMiddleware, logActionMiddleware,
+  emitActionMiddleware, logActionMiddleware, addRedisActionMiddleware,
 } from 'store/middleware';
 import { emitAnyAction, addRootActionListener } from 'socket';
 import { SocketSource } from 'Shared/socket';
 
 const [
-  andEmitAction, emitterMiddleware,
+  andEmitAction,
 ] = emitActionMiddleware<RootState>(emitAnyAction, SocketSource.WEB_CLIENT);
 
 const middleware = applyMiddleware(
   logActionMiddleware(),
-  emitterMiddleware,
+  addRedisActionMiddleware(),
+  // emitterMiddleware,
 );
 const store = createStore(
   rootReducer,

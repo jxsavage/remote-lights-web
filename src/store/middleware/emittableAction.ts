@@ -3,15 +3,11 @@ import {
   Middleware, MiddlewareAPI, Dispatch, AnyAction,
 } from 'redux';
 import { SocketDestination, SocketSource } from 'Shared/socket';
-import chalk from 'chalk';
 import { AllActions, EmittableAction, EmittableActionSocketMeta } from 'Shared/store';
+import log from 'Shared/logger';
 
-const chalkColors = new chalk.Instance({ level: 3 });
+type Emittable = AllActions & EmittableAction;
 
-type Emittable<A extends AllActions = AllActions> = A & EmittableAction;
-type ConvertToEmittableAction = <A extends AllActions>(
-  action: AnyAction, destination: string | SocketDestination,
-) => A & EmittableAction;
 export function isEmittableAction(action: AnyAction): action is Emittable {
   return action.meta?.socket !== undefined;
 }
@@ -51,8 +47,9 @@ A & EmittableAction, Middleware<{}, S>] {
   ) => (
     next: Dispatch<AnyAction>,
   ) => (
-    action: AnyAction,
+    action: AllActions | AllActions & Emittable,
   ) => {
+    next(action);
     if (isEmittableAction(action)) {
       const { hasEmitted, shouldEmit } = action.meta.socket;
       if (shouldEmit && !hasEmitted) {
@@ -61,12 +58,10 @@ A & EmittableAction, Middleware<{}, S>] {
         if (emitterOn) {
           emit(action);
         } else {
-          // eslint-disable-next-line no-console
-          console.log(chalkColors.black.bgYellow('Warning: Emitter Off via REACT_APP_EMITTALBE_ACTION_SHOULD_EMIT'));
+          log('bgYellow', 'Warning: Emitter Off via REACT_APP_EMITTALBE_ACTION_SHOULD_EMIT');
         }
       }
     }
-    next(action);
   };
   return [convertToEmittableAction, emitAction];
 }

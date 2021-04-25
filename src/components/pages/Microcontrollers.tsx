@@ -1,28 +1,23 @@
 import React from 'react';
 import { useShallowRootSelector } from 'components/RootStateProvider';
 import { MicroController } from 'components/microcontrollers';
+import { Card } from 'react-bootstrap';
 
 const MicrocontrollersPage:
 React.FunctionComponent = () => {
   const allMicroIds = useShallowRootSelector((state) => state.remoteLightsEntity.micros.allIds);
   return (
-    <div className="card">
-      <div className="h1 card-header">MicroControllers</div>
-      <div className="card-body">
+    <Card>
+      <Card.Header className="h1">Microcontrollers</Card.Header>
+      <Card.Body className="bg-light">
         {allMicroIds.map((microId) => (
-          <div className="card" key={microId}>
-            <div className="h2 card-header">
-              MicroController:
-              {microId}
-            </div>
-            <MicroController
-              key={microId}
-              microId={microId}
-            />
-          </div>
+          <MicroController
+            key={microId}
+            microId={microId}
+          />
         ))}
-      </div>
-    </div>
+      </Card.Body>
+    </Card>
   );
 };
 export default MicrocontrollersPage;

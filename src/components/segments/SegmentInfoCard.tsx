@@ -1,5 +1,5 @@
 import React from 'react';
-import { LEDSegment, MicroEffect } from 'Shared/store';
+import { LEDSegment, MicroEffect } from 'Shared/types';
 import { Card } from 'react-bootstrap';
 
 interface SegmentInfoCardProps {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import React from 'react';
 import { Tab, Row, Col } from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
@@ -6,8 +7,8 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useShallowRootSelector } from 'components/RootStateProvider';
 import {
   POSSIBLE_EFFECTS_STRINGS, LEDSegment, MicroEffect,
-} from 'Shared/store';
-import { SegmentGroup } from 'Shared/store/types';
+  SegmentGroup,
+} from 'Shared/types';
 
 type EffectTabVariants = 'segment' | 'group';
 type VariantsId = SegmentGroup['segmentGroupId'] | LEDSegment['segmentId'];

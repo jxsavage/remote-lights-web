@@ -4,9 +4,8 @@ import {
 } from 'react-compound-slider';
 import { useDispatch } from 'react-redux';
 import { RootStateDispatch, andEmitAction } from 'components/RootStateProvider';
-import {
-  resizeSegmentsFromBoundaries, MicroState,
-} from 'Shared/store';
+import { MicroState } from 'Shared/types';
+import { resizeSegmentsFromBoundaries } from 'Shared/store';
 import { Handle, Track, TooltipRail } from './children';
 
 interface SegmentResizerProps {

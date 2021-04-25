@@ -3,6 +3,7 @@ import { useShallowRootSelector } from 'components/RootStateProvider';
 import { SegmentInfoCard } from 'components/segments';
 import { EffectTabContainer } from 'components/effects';
 import { setSegmentEffectButtonFactory } from 'components/segments/SetSegmentEffectButton';
+import { Card } from 'react-bootstrap';
 
 const SegmentsPage:
 React.FunctionComponent = () => {
@@ -10,14 +11,14 @@ React.FunctionComponent = () => {
     byId, allIds,
   } = useShallowRootSelector((state) => state.remoteLightsEntity.segments);
   return (
-    <div className="card">
-      <div className="h1 card-header">Segments</div>
-      <div className="card-body">
+    <Card>
+      <Card.Header className="h1">Segments</Card.Header>
+      <Card.Body>
         {allIds.map((segmentId) => (
-          <div className="card" key={segmentId}>
-            <div className="h2 card-header">
+          <Card key={segmentId}>
+            <Card.Header className="h2">
               {`Segment ${segmentId}`}
-            </div>
+            </Card.Header>
             <SegmentInfoCard
               segment={byId[segmentId]}
             />
@@ -26,10 +27,10 @@ React.FunctionComponent = () => {
               id={segmentId}
               setEffectElementFactory={setSegmentEffectButtonFactory}
             />
-          </div>
+          </Card>
         ))}
-      </div>
-    </div>
+      </Card.Body>
+    </Card>
   );
 };
 export default SegmentsPage;

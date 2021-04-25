@@ -1,6 +1,6 @@
 import React from 'react';
 import { faChevronLeft, faPlusCircle, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { LEDSegment, Direction } from 'Shared/store/types';
+import { LEDSegment, Direction } from 'Shared/types';
 import { mergeSegments } from 'Shared/store';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';

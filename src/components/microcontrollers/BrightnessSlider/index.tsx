@@ -1,16 +1,15 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Slider, Rail, Handles, Tracks,
 } from 'react-compound-slider';
 import { Card } from 'react-bootstrap';
 
-import { useDispatch } from 'react-redux';
 import { RootStateDispatch, andEmitAction } from 'components/RootStateProvider';
-import {
-  setMicroBrightness, MicroState,
-} from 'Shared/store';
+import { MicroState } from 'Shared/types';
+import { setMicroBrightness } from 'Shared/store';
 import { Handle, Track, TooltipRail } from './children';
 
 export interface BrightnessSliderProps {
@@ -35,16 +34,16 @@ function BrightnessSlider(
 ): JSX.Element {
   const dispatch = useDispatch<RootStateDispatch>();
   const updateBrightness = (slider: readonly number[]): void => {
-    // eslint-disable-next-line no-shadow
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const [brightness] = slider;
     dispatch(andEmitAction(setMicroBrightness({
       microId, brightness,
     }), microId.toString()));
   };
   return (
-    <Card>
+    <Card className="mb-3 border border-light rounded overflow-hidden">
       <Card.Header className="h3">{`Brightness: ${calcPercent(brightness)}%`}</Card.Header>
-      <Card.Body style={{ height: 'fit-content', width: '100%', paddingBottom: '3rem' }}>
+      <Card.Body className="pb-5 w-100 bg-primary" style={{ height: 'fit-content' }}>
         <Slider
           mode={1}
           step={1}

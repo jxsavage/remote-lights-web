@@ -68,7 +68,6 @@ export function logActionMiddleware<S = any>(): Middleware<{}, S> {
         `${infoHeader(' Next State ')}\n${textGreen(JSON.stringify(nextState, null, '  '))}`,
       );
     }
-    let stateChanged = false;
     if (currentLogLevel >= Verbose) {
       log(infoHeader(' State Changes: '));
       const {
@@ -77,7 +76,7 @@ export function logActionMiddleware<S = any>(): Middleware<{}, S> {
       const hasAdded = Object.keys(added).length !== 0;
       const hasUpdated = Object.keys(updated).length !== 0;
       const hasDeleted = Object.keys(updated).length !== 0;
-      stateChanged = hasAdded || hasUpdated || hasDeleted;
+
       if (hasAdded) {
         log(
           `${bgGreen(' Items Added: ')}

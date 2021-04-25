@@ -1,4 +1,4 @@
-import { LEDSegment, SegmentGroup } from 'Shared/store/types';
+import { LEDSegment, SegmentGroup } from 'Shared/types';
 import { useDispatch } from 'react-redux';
 import {
   addSegmentToGroup,
