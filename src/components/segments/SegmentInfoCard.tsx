@@ -7,7 +7,11 @@ interface SegmentInfoCardProps {
 }
 const SegmentInfoCard:
 React.FunctionComponent<SegmentInfoCardProps> = (
-  { segment: { effect, numLEDs, offset } },
+  {
+    segment: {
+      effect, numLEDs, offset, segmentId,
+    },
+  },
 ) => (
   <Card>
     <Card.Header className="h4">
@@ -26,6 +30,10 @@ React.FunctionComponent<SegmentInfoCardProps> = (
         <li className="h5">
           <span>Offset: </span>
           <span>{offset}</span>
+        </li>
+        <li className="h5">
+          <span>ID: </span>
+          <span>{segmentId}</span>
         </li>
       </ul>
     </Card.Body>

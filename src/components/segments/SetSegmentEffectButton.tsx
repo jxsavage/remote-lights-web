@@ -1,4 +1,4 @@
-import React, { createFactory, createElement } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { setSegmentEffect } from 'Shared/store';
@@ -35,7 +35,5 @@ React.FunctionComponent<SetSegmentEffectButtonProps> = (
     </Button>
   );
 };
-const setSegmentEffectButtonFactory = createFactory<
-SetSegmentEffectButtonProps>(SetSegmentEffectButton);
 
-export { setSegmentEffectButtonFactory, SetSegmentEffectButton };
+export default SetSegmentEffectButton;

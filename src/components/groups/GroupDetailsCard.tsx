@@ -9,7 +9,6 @@ import { SocketDestination } from 'Shared/socket';
 import {
   RemoveSegmentFromGroupButton, AddSegmentToGroupButton, DeleteSegmentGroupButton,
 } from './actions';
-import { setGroupEffectButtonFactory } from './SetGroupEffectButton';
 
 const { SERVER } = SocketDestination;
 interface GroupDetailsCardProps {
@@ -19,17 +18,18 @@ const GroupDetailsCard:
 React.FunctionComponent<GroupDetailsCardProps> = (
   { groupId },
 ) => {
-  const [
-    {
+  const {
+    group: {
       segmentGroupId, segmentIds, controlsEffect, groupEffect,
-    }, groupSegments, segmentsEntity,
-  ] = useShallowRootSelector((state) => {
+    },
+    segmentsEntity,
+  } = useShallowRootSelector((state) => {
     const grp = state.remoteLightsEntity.segmentGroups.byId[groupId];
     const segEntity = state.remoteLightsEntity.segments;
     const grpSegs = grp.segmentIds.map(
       (segmentId) => segEntity.byId[segmentId],
     );
-    return [grp, grpSegs, segEntity];
+    return { group: grp, grpSegs, segmentsEntity: segEntity };
   });
   const dispatch = useDispatch<RootStateDispatch>();
   function handleEffectCheckboxChange(
@@ -74,7 +74,7 @@ React.FunctionComponent<GroupDetailsCardProps> = (
                   <EffectTabContainer
                     variant="group"
                     id={groupId}
-                    setEffectElementFactory={setGroupEffectButtonFactory}
+                    // setEffectElementFactory={setGroupEffectButtonFactory}
                   />
                 </Card.Body>
               </Card>

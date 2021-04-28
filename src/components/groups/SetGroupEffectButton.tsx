@@ -1,4 +1,4 @@
-import React, { createFactory, createElement } from 'react';
+import React from 'react';
 import { setGroupEffect } from 'Shared/store';
 import { SegmentGroup, MicroEffect } from 'Shared/types';
 import { useDispatch } from 'react-redux';
@@ -36,6 +36,6 @@ React.FunctionComponent<SetGroupEffectButtonProps> = (
     </Button>
   );
 };
-const setGroupEffectButtonFactory = createFactory<SetGroupEffectButtonProps>(SetGroupEffectButton);
+// const setGroupEffectButtonFactory = createFactory<SetGroupEffectButtonProps>(SetGroupEffectButton);
 
-export { SetGroupEffectButton, setGroupEffectButtonFactory };
+export default SetGroupEffectButton;

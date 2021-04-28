@@ -2,7 +2,6 @@ import React from 'react';
 import { useShallowRootSelector } from 'components/RootStateProvider';
 import { SegmentInfoCard } from 'components/segments';
 import { EffectTabContainer } from 'components/effects';
-import { setSegmentEffectButtonFactory } from 'components/segments/SetSegmentEffectButton';
 import { Card } from 'react-bootstrap';
 
 const SegmentsPage:
@@ -25,7 +24,7 @@ React.FunctionComponent = () => {
             <EffectTabContainer
               variant="segment"
               id={segmentId}
-              setEffectElementFactory={setSegmentEffectButtonFactory}
+              // setEffectElementFactory={setSegmentEffectButtonFactory}
             />
           </Card>
         ))}

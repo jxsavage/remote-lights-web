@@ -6,7 +6,7 @@ import { useShallowRootSelector } from 'components/RootStateProvider';
 import segmentTabWidth from 'components/utils';
 import { EffectTabContainer } from 'components/effects';
 import SegmentInfoCard from 'components/segments/SegmentInfoCard';
-import { setSegmentEffectButtonFactory } from 'components/segments/SetSegmentEffectButton';
+// import { setSegmentEffectButtonFactory } from 'components/segments/SetSegmentEffectButton';
 
 const segmentButtonStyle: React.CSSProperties = {
   width: '100%',
@@ -89,7 +89,7 @@ React.FunctionComponent<SegmentTabContentProps> = (
               <EffectTabContainer
                 variant="segment"
                 id={segment.segmentId}
-                setEffectElementFactory={setSegmentEffectButtonFactory}
+                // setEffectElementFactory={setSegmentEffectButtonFactory}
               />
             </Card.Body>
           </Card>

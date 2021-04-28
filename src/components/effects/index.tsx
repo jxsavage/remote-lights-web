@@ -5,6 +5,8 @@ import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useShallowRootSelector } from 'components/RootStateProvider';
+import SetSegmentEffectButton from 'components/segments/SetSegmentEffectButton';
+
 import {
   POSSIBLE_EFFECTS_STRINGS, LEDSegment, MicroEffect,
   SegmentGroup,
@@ -12,19 +14,14 @@ import {
 
 type EffectTabVariants = 'segment' | 'group';
 type VariantsId = SegmentGroup['segmentGroupId'] | LEDSegment['segmentId'];
-interface SetEffectElementFactoryProps {
-  id: VariantsId;
-  newEffect: MicroEffect;
-}
 interface EffectTabContainerProps {
   variant: EffectTabVariants;
   id: VariantsId;
-  setEffectElementFactory: React.FunctionComponentFactory<SetEffectElementFactoryProps>;
 }
 export const EffectTabContainer:
 React.FunctionComponent<
 EffectTabContainerProps
-> = ({ variant, id, setEffectElementFactory }) => {
+> = ({ variant, id }) => {
   const currentEffect = useShallowRootSelector((
     { remoteLightsEntity: { segments, segmentGroups } },
   ) => ((variant === 'segment')
@@ -46,7 +43,7 @@ EffectTabContainerProps
               <EffectTab />
             </Col>
             <Col sm={9}>
-              <EffectTabContent {...{ setEffectElementFactory, id }} />
+              <EffectTabContent {...{ id }} />
             </Col>
           </Row>
         </Tab.Container>
@@ -72,11 +69,10 @@ export function EffectTab(): JSX.Element {
 }
 interface EffectTabContentProps {
   id: VariantsId;
-  setEffectElementFactory: React.FunctionComponentFactory<SetEffectElementFactoryProps>;
 }
 export const EffectTabContent:
 React.FunctionComponent<EffectTabContentProps> = (
-  { id, setEffectElementFactory },
+  { id },
 ) => (
   <Tab.Content>
     {POSSIBLE_EFFECTS_STRINGS.map((effectName, newEffect) => (
@@ -91,7 +87,9 @@ React.FunctionComponent<EffectTabContentProps> = (
           <Card.Body />
           <Card.Footer>
             <ButtonGroup>
-              {setEffectElementFactory({ newEffect, id })}
+              <SetSegmentEffectButton
+                {...{ newEffect, id }}
+              />
             </ButtonGroup>
           </Card.Footer>
         </Card>
