@@ -32,8 +32,11 @@ export function initWebClient(): void {
 export function writeEEPROM(microId: MicroId): void {
   socket.emit(MicroActionType.WRITE_EEPROM, microId);
 }
+export function loadEEPROM(microId: MicroId): void {
+  socket.emit('LOAD_EEPROM', microId);
+}
 export function resetMicro(microId: MicroId): void {
-  socket.emit(MicroActionType.RESET_MICRO_STATE, microId);
+  socket.emit(MicroActionType.RESET_MICRO, microId);
 }
 
 export default socket;
