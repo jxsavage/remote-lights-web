@@ -3,6 +3,7 @@ import { AnyAction, Dispatch } from 'redux';
 import { WebEmitEvent, SharedEmitEvent } from 'Shared/socket';
 import { MicroActionType, MicroId } from 'Shared/types';
 import { AllActions } from 'Shared/store';
+import { MicroCommand } from 'Shared/types/micro';
 
 interface ClientEnv {
   REACT_APP_SOCKET_IP: string;
@@ -33,10 +34,13 @@ export function writeEEPROM(microId: MicroId): void {
   socket.emit(MicroActionType.WRITE_EEPROM, microId);
 }
 export function loadEEPROM(microId: MicroId): void {
-  socket.emit('LOAD_EEPROM', microId);
+  socket.emit(MicroCommand.LOAD_EEPROM, microId);
 }
 export function resetMicro(microId: MicroId): void {
-  socket.emit(MicroActionType.RESET_MICRO, microId);
+  socket.emit(MicroCommand.RESET, microId);
+}
+export function restoreDefault(microId: MicroId): void {
+  socket.emit(MicroCommand.RESTORE_DEFAULT, microId);
 }
 
 export default socket;

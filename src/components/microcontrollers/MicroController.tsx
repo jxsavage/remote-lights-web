@@ -4,7 +4,7 @@ import { useShallowRootSelector } from 'components/RootStateProvider';
 import { MicroState } from 'Shared/types';
 import { SegmentEditor } from 'components/segments';
 import { Button } from 'react-bootstrap';
-import { resetMicro, writeEEPROM, loadEEPROM } from 'socket';
+import { resetMicro, writeEEPROM, loadEEPROM, restoreDefault } from 'socket';
 import LEDSegments from './LEDSegments';
 import BrightnessSlider from './BrightnessSlider';
 
@@ -30,6 +30,9 @@ React.FunctionComponent<MicroControllerProps> = (
   function loadEEPROMOnClick(): void {
     loadEEPROM(microId);
   }
+  function restoreDefaultOnClick(): void {
+    restoreDefault(microId);
+  }
   return (
     <Card className="mb-3">
       <Card.Header className="h2">
@@ -46,14 +49,17 @@ React.FunctionComponent<MicroControllerProps> = (
         />
       </Card.Body>
       <Card.Footer>
-        <Button onClick={writeEEPROMOnClick} variant="info">
-          Write EEPROM
-        </Button>
         <Button onClick={resetMicroOnClick} variant="info">
           Reset
         </Button>
         <Button onClick={loadEEPROMOnClick} variant="info">
           Load EEPROM
+        </Button>
+        <Button onClick={writeEEPROMOnClick} variant="info">
+          Write EEPROM
+        </Button>
+        <Button onClick={restoreDefaultOnClick} variant="info">
+          Restore Default
         </Button>
       </Card.Footer>
     </Card>
