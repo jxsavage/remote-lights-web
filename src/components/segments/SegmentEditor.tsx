@@ -12,7 +12,7 @@ const SegmentEditor: React.FunctionComponent<SegmentEditorProps> = ({ micro }) =
     microId, totalLEDs, segmentIds,
   } = micro;
   return (
-    <Card className="mb-3 border border-light rounded overflow-hidden">
+    <Card className="mb-3 border border-light rounded">
       <Card.Header className="h3">Segment Editor</Card.Header>
       <Card.Body>
         <SegmentActionsButtonGroup {...{

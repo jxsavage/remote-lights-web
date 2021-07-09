@@ -3,10 +3,11 @@ import Card from 'react-bootstrap/Card';
 import { useShallowRootSelector } from 'components/RootStateProvider';
 import { MicroState } from 'Shared/types';
 import { SegmentEditor } from 'components/segments';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import {
   resetMicro, writeEEPROM, loadEEPROM, restoreDefault,
 } from 'socket';
+import { setMicroAlias } from 'Shared/store';
 import LEDSegments from './LEDSegments';
 import BrightnessSlider from './BrightnessSlider';
 
@@ -21,7 +22,7 @@ React.FunctionComponent<MicroControllerProps> = (
     (state) => state.remoteLightsEntity.micros.byId[microId],
   );
   const {
-    brightness, totalLEDs, segmentIds,
+    brightness, totalLEDs, segmentIds, alias,
   } = micro;
   function writeEEPROMOnClick(): void {
     writeEEPROM(microId);
@@ -35,11 +36,20 @@ React.FunctionComponent<MicroControllerProps> = (
   function restoreDefaultOnClick(): void {
     restoreDefault(microId);
   }
+  function setMicroAliasOnClick(): void {
+    // setMicroAlias()
+  }
   return (
     <Card className="mb-3">
       <Card.Header className="h2">
-        Microcontroller:
-        {` ${microId}`}
+        <Form>
+          <Form.Group>
+            <Form.Label>
+              Microcontroller
+            </Form.Label>
+            <Form.Control placeholder={alias} />
+          </Form.Group>
+        </Form>
       </Card.Header>
       <Card.Body>
         <BrightnessSlider {...{ microId, brightness }} />
